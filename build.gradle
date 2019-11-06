@@ -1,0 +1,36 @@
+allprojects {
+    group 'com.zhaofujun.nest'
+    version '1.0-SNAPSHOT'
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    sourceCompatibility = '1.8'
+
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    dependencies {
+
+        compile ('com.zhaofujun.nest:nest-ddd:1.2.RELEASE')
+
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+
+    apply from: "${rootProject.projectDir}/publish.gradle"
+}
+
+
+
+
+

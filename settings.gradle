@@ -1,0 +1,8 @@
+rootProject.name = 'nest-plus'
+include 'nest-spring-boot-starter'
+include 'nest-spring-activemq'
+include 'nest-spring-redis'
+include 'nest-spring-rabbitmq'
+include 'nest-spring-rocketmq'
+include 'nest-mybatis-paging'
+

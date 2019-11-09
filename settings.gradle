@@ -5,4 +5,5 @@ include 'nest-spring-redis'
 include 'nest-spring-rabbitmq'
 include 'nest-spring-rocketmq'
 include 'nest-mybatis-paging'
+include 'nest-demo'
 

@@ -1,3 +1,16 @@
+buildscript {
+    ext {
+        springBootVersion = "2.1.6.RELEASE"
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+
 allprojects {
     group 'com.zhaofujun.nest'
     version '1.0-SNAPSHOT'
@@ -7,6 +20,9 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'maven'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
 
     repositories {
         mavenLocal()
@@ -22,14 +38,23 @@ subprojects {
 
     dependencies {
 
-        compile ('com.zhaofujun.nest:nest-ddd:1.2.RELEASE')
-
+        compile('com.zhaofujun.nest:nest-ddd')
         testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile("org.springframework.boot:spring-boot-starter-test")
     }
 
-    apply from: "${rootProject.projectDir}/publish.gradle"
-}
 
+    dependencyManagement {
+        dependencies {
+            dependency("com.zhaofujun.nest:nest-ddd:1.2.RELEASE")
+            dependency("org.aspectj:aspectjtools:1.9.3")
+        }
+
+    }
+    jar.enabled=true
+
+//    apply from: "${rootProject.projectDir}/publish.gradle"
+}
 
 
 

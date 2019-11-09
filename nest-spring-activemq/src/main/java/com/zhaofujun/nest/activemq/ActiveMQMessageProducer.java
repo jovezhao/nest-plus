@@ -4,36 +4,32 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 import com.zhaofujun.nest.utils.JsonUtils;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQTopic;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 import javax.jms.*;
 
 public class ActiveMQMessageProducer extends DistributeMessageProducer {
-    private String brokers;
 
-    public ActiveMQMessageProducer(String brokers) {
-        this.brokers = brokers;
+    private JmsTemplate jmsTemplate;
+
+    public ActiveMQMessageProducer(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
     }
 
     @Override
     public void commit(String messageGroup, MessageInfo messageInfo) {
-        try {
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokers);
-            Connection connection = connectionFactory.createConnection();
-            connection.start();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Topic topic = session.createTopic("VirtualTopic."+messageGroup);
-            MessageProducer producer = session.createProducer(topic);
-            producer.send(session.createTextMessage(JsonUtils.toJsonString(messageInfo)));
-            producer.close();
-            session.close();
-            connection.close();
-        } catch (Exception ex) {
-
-        }
-    }
-
-    @Override
-    public void destruction() {
+        Topic topic = new ActiveMQTopic("VirtualTopic." + messageGroup);
+        String json = JsonUtils.toJsonString(messageInfo);
+        jmsTemplate.send(topic, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createTextMessage(json);
+            }
+        });
 
     }
+
+
 }

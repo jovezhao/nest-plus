@@ -1,28 +1,54 @@
 package com.zhaofujun.nest.activemq;
 
-import com.sun.jndi.ldap.pool.PooledConnectionFactory;
+import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.container.ContainerProvider;
+import com.zhaofujun.nest.context.event.channel.MessageProducer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import org.springframework.jms.core.JmsTemplate;
 
-import javax.jms.Connection;
 
 public class ActiveMQMessageChannel extends DistributeMessageChannel {
 
-    private BeanFinder beanFinder;
-    public static final String Code = "ACTIVEMQ_CHANNEL";
-    private String brokers;
+    public static final String CACHE_CODE = "ActiveMQMessageChannel";
 
-    private ActiveMQMessageConsumer messageConsumer = null;
-    private ActiveMQMessageProducer messageProducer = null;
+    private ContainerProvider containerProvider;
+    private JmsTemplate jmsTemplate;
+    private DistributeMessageProducer messageProducer;
+    private DistributeMessageConsumer messageConsumer;
+    private NestApplication nestApplication;
 
-    private Connection connection;
+    public ActiveMQMessageChannel(ContainerProvider containerProvider, JmsTemplate jmsTemplate, NestApplication nestApplication) {
+        this.containerProvider = containerProvider;
+        this.jmsTemplate = jmsTemplate;
+        this.nestApplication = nestApplication;
+
+        this.nestApplication.addApplicationListener(new ApplicationListener() {
+            @Override
+            public void applicationStarted(ApplicationEvent applicationEvent) {
+                //应用启动
+            }
+
+            @Override
+            public void applicationClosed(ApplicationEvent applicationEvent) {
+                onClose();
+            }
+        });
+    }
+
+    @Override
+    public String getMessageChannelCode() {
+        return CACHE_CODE;
+    }
 
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new ActiveMQMessageProducer(brokers);
+            messageProducer = new ActiveMQMessageProducer(jmsTemplate);
         return messageProducer;
     }
 
@@ -30,7 +56,7 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if (messageConsumer == null)
-            messageConsumer = new ActiveMQMessageConsumer(beanFinder, brokers);
+            messageConsumer = new ActiveMQMessageConsumer(jmsTemplate, this.containerProvider);
         return messageConsumer;
     }
 
@@ -41,11 +67,8 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
 
     @Override
     public void onClose() {
-
+        getMessageConsumer().stop();
     }
 
-    public ActiveMQMessageChannel(BeanFinder beanFinder, String brokers) {
-        this.beanFinder = beanFinder;
-        this.brokers = brokers;
-    }
+
 }

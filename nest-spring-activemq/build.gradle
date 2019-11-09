@@ -3,5 +3,7 @@
  */
 
 dependencies {
-    compile 'org.apache.activemq:activemq-client:5.14.4'
+    testCompile project(":nest-spring-boot-starter")
+    compile 'org.springframework.boot:spring-boot-starter-activemq'
+    compile 'org.apache.activemq:activemq-pool'
 }

@@ -6,30 +6,35 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.utils.JsonUtils;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.springframework.boot.autoconfigure.jms.JmsPoolConnectionFactoryFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.jms.listener.adapter.MessageListenerAdapter;
+import sun.nio.ch.ThreadPool;
 
 import javax.jms.*;
 
 public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
-    private String brokers;
+    private JmsTemplate jmsTemplate;
+    private boolean running = false;
 
-    public ActiveMQMessageConsumer(BeanFinder beanFinder, String brokers) {
+    public ActiveMQMessageConsumer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
         super(beanFinder);
-        this.brokers = brokers;
+        this.jmsTemplate = jmsTemplate;
     }
 
     @Override
     public void subscribe(EventHandler eventHandler) {
-        try {
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokers);
-            Connection connection = connectionFactory.createConnection();
-            connection.start();
-            Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-            Queue queue = session.createQueue("Consumer." + eventHandler.getClass().getSimpleName() + ".VirtualTopic." + eventHandler.getEventCode());
-            MessageConsumer consumer = session.createConsumer(queue);
-            consumer.setMessageListener(new MessageListener() {
-                @Override
-                public void onMessage(Message message) {
+        running = true;
+        while (running) {
+            for (int i = 0; i < 10; i++) {
+                if (running) {
+                    Queue queue = new ActiveMQQueue("Consumer." + eventHandler.getClass().getSimpleName() + ".VirtualTopic." + eventHandler.getEventCode());
+                    Message message = jmsTemplate.receive(queue);
                     TextMessage textMessage = (TextMessage) message;
                     String messageText = null;
                     try {
@@ -39,14 +44,9 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                     }
                     MessageInfo messageInfo = JsonUtils.toObj(messageText, MessageInfo.class);
 
-                    ConsumerContext consumerContext = new ConsumerContext(connection, session, consumer, message);
-
-                    onReceivedMessage(messageInfo, eventHandler, consumerContext);
-
+                    onReceivedMessage(messageInfo, eventHandler, null);
                 }
-            });
-        } catch (Exception ex) {
-
+            }
         }
     }
 
@@ -57,14 +57,11 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
     @Override
     protected void onEnds(EventHandler eventHandler, Object context) {
-        ConsumerContext consumerContext = (ConsumerContext) context;
-        try {
-            consumerContext.getMessage().acknowledge();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-
     }
 
 
+    @Override
+    public void stop() {
+        running = false;
+    }
 }

@@ -5,16 +5,20 @@ import com.zhaofujun.nest.container.ContainerProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.*;
-import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
-public class SpringBeanContainerProvider implements ContainerProvider, ApplicationContextAware {
+@Component
+public class SpringBeanContainerProvider implements ContainerProvider {
 
     private Logger logger = LoggerFactory.getLogger(SpringBeanContainerProvider.class);
+
+    @Autowired
     private ConfigurableApplicationContext applicationContext;
 
 
@@ -53,15 +57,4 @@ public class SpringBeanContainerProvider implements ContainerProvider, Applicati
     }
 
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = (ConfigurableApplicationContext) applicationContext;
-        this.applicationContext.addApplicationListener(new ApplicationListener<ContextClosedEvent>() {
-            @Override
-            public void onApplicationEvent(ContextClosedEvent event) {
-                NestApplication application = getInstance(NestApplication.class);
-                application.close();
-            }
-        });
-    }
 }

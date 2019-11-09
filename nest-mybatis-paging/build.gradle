@@ -1,4 +1,0 @@
-
-dependencies {
-    compileOnly 'org.mybatis:mybatis:3.2.7'
-}

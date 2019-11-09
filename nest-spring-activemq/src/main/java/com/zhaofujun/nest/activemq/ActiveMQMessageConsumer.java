@@ -20,7 +20,7 @@ import javax.jms.*;
 public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
     private JmsTemplate jmsTemplate;
-    private boolean running = false;
+    private volatile boolean running = false;
 
     public ActiveMQMessageConsumer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
         super(beanFinder);

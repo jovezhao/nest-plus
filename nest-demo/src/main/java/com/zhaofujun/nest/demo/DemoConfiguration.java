@@ -1,9 +1,9 @@
 package com.zhaofujun.nest.demo;
 
-import com.zhaofujun.nest.activemq.ActiveMQMessageChannel;
 import com.zhaofujun.nest.configuration.CacheConfiguration;
 import com.zhaofujun.nest.configuration.EventConfiguration;
 import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
+import com.zhaofujun.nest.rabbitmq.RabbitMQMessageChannel;
 import com.zhaofujun.nest.redis.RedisCacheProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class DemoConfiguration {
     public EventConfiguration testEventConfiguration() {
         EventConfiguration eventConfiguration = new EventConfiguration();
         eventConfiguration.setEventCode(DemoEventData.Code);
-        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CACHE_CODE);
+        eventConfiguration.setMessageChannelCode(RabbitMQMessageChannel.CHANNEL_CODE);
         return eventConfiguration;
     }
 

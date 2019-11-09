@@ -6,7 +6,6 @@ import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
 import com.zhaofujun.nest.context.loader.EntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 import com.zhaofujun.nest.spring.AppService;
-import com.zhaofujun.nest.spring.test.models.PasswordChangedEvent;
 import com.zhaofujun.nest.spring.test.models.PasswordChangedEventData;
 import com.zhaofujun.nest.spring.test.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ public class TestAppservices {
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 
-        PasswordChangedEvent passwordChangedEvent = new PasswordChangedEvent(eventObject, "");
-        eventBus.publish(passwordChangedEvent);
+        eventBus.publish(eventObject);
     }
 
 
@@ -38,8 +36,7 @@ public class TestAppservices {
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 //
-        PasswordChangedEvent passwordChangedEvent = new PasswordChangedEvent(eventObject, "");
-        eventBus.publish(passwordChangedEvent);
+        eventBus.publish(eventObject);
     }
 }
 

@@ -3,7 +3,5 @@
  */
 
 dependencies {
-    testCompile project(":nest-spring-boot-starter")
     compile 'org.springframework.boot:spring-boot-starter-activemq'
-    compile 'org.apache.activemq:activemq-pool'
 }

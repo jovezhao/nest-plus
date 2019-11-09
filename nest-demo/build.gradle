@@ -1,6 +1,7 @@
 dependencies {
     compile project(":nest-spring-boot-starter")
-    compile project(":nest-spring-activemq")
+//    compile project(":nest-spring-activemq")
+    compile project(":nest-spring-rabbitmq")
     compile project(":nest-spring-redis")
     compile ("org.springframework.boot:spring-boot-starter-web")
 }

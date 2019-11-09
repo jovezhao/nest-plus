@@ -14,7 +14,7 @@ import org.springframework.jms.core.JmsTemplate;
 
 public class ActiveMQMessageChannel extends DistributeMessageChannel {
 
-    public static final String CACHE_CODE = "ActiveMQMessageChannel";
+    public static final String CHANNEL_CODE = "ActiveMQMessageChannel";
 
     private ContainerProvider containerProvider;
     private JmsTemplate jmsTemplate;
@@ -42,7 +42,7 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
 
     @Override
     public String getMessageChannelCode() {
-        return CACHE_CODE;
+        return CHANNEL_CODE;
     }
 
     @Override

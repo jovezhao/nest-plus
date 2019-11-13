@@ -1,9 +1,7 @@
 package com.zhaofujun.nest.activemq;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.channel.MessageProducer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;

@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.demo;
 
 import com.zhaofujun.nest.context.event.EventArgs;
-import com.zhaofujun.nest.context.event.EventHandler;
+import com.zhaofujun.nest.core.EventHandler;
 import org.springframework.stereotype.Component;
 
 @Component

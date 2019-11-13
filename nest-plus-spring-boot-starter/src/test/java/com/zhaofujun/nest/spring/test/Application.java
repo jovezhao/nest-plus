@@ -2,7 +2,7 @@ package com.zhaofujun.nest.spring.test;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;

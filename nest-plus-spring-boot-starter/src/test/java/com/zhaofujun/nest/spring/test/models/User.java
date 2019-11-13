@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.spring.test.models;
 
-import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.core.BaseEntity;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 
 

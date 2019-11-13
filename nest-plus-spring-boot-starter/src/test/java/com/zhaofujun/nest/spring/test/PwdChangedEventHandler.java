@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.spring.test;
 
 import com.zhaofujun.nest.context.event.EventArgs;
-import com.zhaofujun.nest.context.event.EventHandler;
+import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.spring.test.models.PasswordChangedEventData;
 
 public class PwdChangedEventHandler implements EventHandler<PasswordChangedEventData> {

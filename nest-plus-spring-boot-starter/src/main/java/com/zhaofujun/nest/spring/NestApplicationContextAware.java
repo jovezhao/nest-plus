@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.demo;
 
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.spring.AppService;
 import com.zhaofujun.nest.spring.SpringBeanContainerProvider;
 import org.springframework.beans.factory.annotation.Autowired;

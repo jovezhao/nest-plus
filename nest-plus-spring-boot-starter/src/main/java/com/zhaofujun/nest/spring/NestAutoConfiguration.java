@@ -1,12 +1,10 @@
 package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.context.event.DefaultEventBus;
+import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import com.zhaofujun.nest.core.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +29,7 @@ public class NestAutoConfiguration {
 
     @Bean
     public EventBus getEventBus(BeanFinder beanFinder) {
-        return new EventBus(beanFinder);
+        return new DefaultEventBus(beanFinder);
     }
 }
 

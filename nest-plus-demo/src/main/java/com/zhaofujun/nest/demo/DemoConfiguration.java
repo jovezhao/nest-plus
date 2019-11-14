@@ -19,12 +19,12 @@ public class DemoConfiguration {
         return eventConfiguration;
     }
 
-//    @Bean
-//    public CacheConfiguration cacheConfiguration() {
-//        CacheConfiguration cacheConfiguration = new CacheConfiguration();
-//        cacheConfiguration.setCacheCode(DefaultMessageStore.CACHE_CODE);
-//        cacheConfiguration.setName("事件消息存储策略");
-//        cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
-//        return cacheConfiguration;
-//    }
+    @Bean
+    public CacheConfiguration cacheConfiguration() {
+        CacheConfiguration cacheConfiguration = new CacheConfiguration();
+        cacheConfiguration.setCacheCode(DefaultMessageStore.CACHE_CODE);
+        cacheConfiguration.setName("事件消息存储策略");
+        cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
+        return cacheConfiguration;
+    }
 }

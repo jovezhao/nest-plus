@@ -22,10 +22,11 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     private RocketMQProperties rocketMQProperties;
     private NestApplication nestApplication;
 
-    public RocketMQMessageChannel(ContainerProvider containerProvider, RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
+    public RocketMQMessageChannel(ContainerProvider containerProvider, RocketMQProperties rocketMQProperties,RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
         this.containerProvider = containerProvider;
         this.rocketMQTemplate = rocketMQTemplate;
         this.nestApplication = nestApplication;
+        this.rocketMQProperties=rocketMQProperties;
 
         this.nestApplication.addApplicationListener(new ApplicationListener() {
             @Override

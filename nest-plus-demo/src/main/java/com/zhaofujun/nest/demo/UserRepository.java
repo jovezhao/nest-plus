@@ -1,11 +1,18 @@
-package com.zhaofujun.nest.spring.test.repositories;
+package com.zhaofujun.nest.demo;
 
 import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
-import com.zhaofujun.nest.spring.test.models.User;
+import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Component
 public class UserRepository implements Repository<User> {
+
+    Map<Identifier, User> useMap = new HashMap<>();
 
     @Override
     public Class<User> getEntityClass() {
@@ -14,24 +21,25 @@ public class UserRepository implements Repository<User> {
 
     @Override
     public User getEntityById(Identifier identifier, EntityLoader<User> entityLoader) {
-        User user = entityLoader.create(identifier);
-        return user;
+        return useMap.get(identifier);
     }
 
     @Override
-    public void insert(User user) {
-
+    public void insert(User use) {
+        useMap.put(use.getId(), use);
     }
 
     @Override
-    public void update(User user) {
+    public void update(User use) {
+        useMap.put(use.getId(), use);
 
     }
-
 
     @Override
     public void delete(User user) {
+        useMap.remove(user.getId());
 
     }
+
 
 }

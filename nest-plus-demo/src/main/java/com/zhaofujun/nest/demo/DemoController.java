@@ -13,6 +13,12 @@ public class DemoController {
     @GetMapping("/publish")
     public String publish() {
         demoAppService.doSomething();
-        return "ok";
+        return "publish";
+    }
+
+    @GetMapping("/change")
+    public String change() {
+        demoAppService.changeAge();
+        return "change";
     }
 }

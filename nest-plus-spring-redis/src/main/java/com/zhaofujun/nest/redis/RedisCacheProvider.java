@@ -14,8 +14,8 @@ public class RedisCacheProvider implements CacheProvider {
 
     private StringRedisTemplate redisTemplate;
 
-    public RedisCacheProvider(ApplicationContext applicationContext) {
-        redisTemplate = applicationContext.getBean(StringRedisTemplate.class);
+    public RedisCacheProvider(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
     }
 
     @Override

@@ -21,6 +21,8 @@ public class NestApplicationContextAware implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        nestApplication.start();
+
         eventBus.autoRegister();
 
 

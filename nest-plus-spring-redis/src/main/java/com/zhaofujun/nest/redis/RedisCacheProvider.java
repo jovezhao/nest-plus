@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class RedisCacheProvider implements CacheProvider {
     public final static String CODE = "REDIS_CACHE_PROVIDER";
@@ -53,6 +54,7 @@ public class RedisCacheProvider implements CacheProvider {
     public void put(String groupName, String key, Object value, long idleSeconds) {
         String json = JsonUtils.toJsonString(value);
         redisTemplate.opsForHash().put(groupName, key, json);
+        redisTemplate.expire(groupName,idleSeconds, TimeUnit.SECONDS);
     }
 
     @Override

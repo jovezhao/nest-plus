@@ -48,6 +48,7 @@ subprojects {
     dependencyManagement {
         dependencies {
             dependency("com.zhaofujun.nest:nest-ddd:2.0.RELEASE")
+            dependency("com.zhaofujun.automapper:automapper:1.2.RELEASE")
             dependency("org.aspectj:aspectjtools:1.9.3")
         }
 

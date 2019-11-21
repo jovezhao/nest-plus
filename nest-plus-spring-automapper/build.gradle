@@ -1,0 +1,6 @@
+
+dependencies {
+    compile("com.zhaofujun.automapper:automapper")
+    compile("org.springframework.boot:spring-boot-starter")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

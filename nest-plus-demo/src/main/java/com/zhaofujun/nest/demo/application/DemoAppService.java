@@ -1,12 +1,11 @@
-package com.zhaofujun.nest.demo;
+package com.zhaofujun.nest.demo.application;
 
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.core.EntityFactory;
 import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.spring.AppService;
-import com.zhaofujun.nest.spring.SpringBeanContainerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @AppService
 public class DemoAppService {
@@ -15,7 +14,7 @@ public class DemoAppService {
     private EventBus eventBus;
 
 
-    public void doSomething() {
+    public void create() {
 
         User user = EntityFactory.create(User.class, StringIdentifier.valueOf("111"));
         user.init("老赵", 10);

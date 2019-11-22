@@ -1,8 +1,11 @@
 dependencies {
     compile project(":nest-plus-spring-boot-starter")
+    compile project(":nest-plus-spring-automapper")
 //    compile project(":nest-plus-spring-activemq")
 //    compile project(":nest-plus-spring-rabbitmq")
 //    compile project(":nest-plus-spring-rocketmq")
-    compile project(":nest-plus-spring-redis")
+//    compile project(":nest-plus-spring-redis")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.baomidou:mybatis-plus-boot-starter:3.2.0")
+    compile("org.postgresql:postgresql")
 }

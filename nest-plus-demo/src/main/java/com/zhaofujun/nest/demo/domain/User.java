@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.demo;
+package com.zhaofujun.nest.demo.domain;
 
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.core.BaseEntity;

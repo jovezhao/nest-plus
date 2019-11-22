@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.demo;
+package com.zhaofujun.nest.demo.application;
 
 import com.zhaofujun.nest.core.EventData;
 

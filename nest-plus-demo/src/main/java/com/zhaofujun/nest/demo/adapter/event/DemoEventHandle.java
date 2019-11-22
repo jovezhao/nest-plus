@@ -2,23 +2,23 @@ package com.zhaofujun.nest.demo.adapter.event;
 
 import com.zhaofujun.nest.context.event.EventArgs;
 import com.zhaofujun.nest.core.EventHandler;
-import com.zhaofujun.nest.demo.application.DemoEventData;
+import com.zhaofujun.nest.demo.contract.TestEventData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DemoEventHandle implements EventHandler<DemoEventData> {
+public class DemoEventHandle implements EventHandler<TestEventData> {
     @Override
     public String getEventCode() {
-        return DemoEventData.Code;
+        return TestEventData.Code;
     }
 
     @Override
-    public Class<DemoEventData> getEventDataClass() {
-        return DemoEventData.class;
+    public Class<TestEventData> getEventDataClass() {
+        return TestEventData.class;
     }
 
     @Override
-    public void handle(DemoEventData demoEventData, EventArgs eventArgs) {
-        System.out.println(demoEventData.toString());
+    public void handle(TestEventData testEventData, EventArgs eventArgs) {
+        System.out.println(testEventData.toString());
     }
 }

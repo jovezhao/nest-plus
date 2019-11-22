@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.demo.infrastructure.repository;
 
 import com.zhaofujun.automapper.AutoMapper;
-import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.context.model.EntityExistedException;
 import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.core.Identifier;

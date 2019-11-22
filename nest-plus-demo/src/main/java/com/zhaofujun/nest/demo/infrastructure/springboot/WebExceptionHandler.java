@@ -11,20 +11,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @ResponseBody
 public class WebExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(WebExceptionHandler.class);
 
     @ExceptionHandler
-    public ResultResponse customException(CustomException e) {
-        return new ResultResponse(e.getErrorCode(), e.getMessage());
+    public ErrorResponse customException(CustomException e) {
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
     @ExceptionHandler
-    public ResultResponse systemException(SystemException e) {
-        return new ResultResponse(500, e.getMessage());
+    public ErrorResponse systemException(SystemException e) {
+        return new ErrorResponse(500, e.getMessage());
     }
 
     @ExceptionHandler
-    public ResultResponse unknownException(Exception e) {
-        return new ResultResponse(500, e.getMessage());
+    public ErrorResponse unknownException(Exception e) {
+        return new ErrorResponse(500, e.getMessage());
     }
 }

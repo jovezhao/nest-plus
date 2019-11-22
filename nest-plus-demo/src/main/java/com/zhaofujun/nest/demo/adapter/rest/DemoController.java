@@ -1,6 +1,6 @@
-package com.zhaofujun.nest.demo.adapter.controller;
+package com.zhaofujun.nest.demo.adapter.rest;
 
-import com.zhaofujun.nest.demo.application.DemoAppService;
+import com.zhaofujun.nest.demo.contract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
 
     @Autowired
-    private DemoAppService demoAppService;
+    private UserService userService;
 
     @GetMapping("/create")
     public String create() {
-        demoAppService.create();
+        userService.create();
         return "publish";
     }
 
     @GetMapping("/change")
     public String change() {
-        demoAppService.changeAge();
+        userService.changeAge();
         return "change";
     }
 }

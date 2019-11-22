@@ -1,10 +1,10 @@
 package com.zhaofujun.nest.demo.infrastructure.springboot;
 
-public class ResultResponse {
+public class ErrorResponse {
     private int code;
     private String message;
 
-    public ResultResponse(int code, String message) {
+    public ErrorResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -1,8 +1,8 @@
-package com.zhaofujun.nest.demo.application;
+package com.zhaofujun.nest.demo.contract;
 
 import com.zhaofujun.nest.core.EventData;
 
-public class DemoEventData extends EventData {
+public class TestEventData extends EventData {
 
     public static final String Code="testEvent";
     private String data;

@@ -7,10 +7,14 @@ import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
+import com.zhaofujun.nest.demo.infrastructure.persistence.service.IUserDmoService;
 import com.zhaofujun.nest.demo.infrastructure.persistence.mapper.UserDmoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserRepository implements Repository<User> {
@@ -21,6 +25,9 @@ public class UserRepository implements Repository<User> {
     @Autowired
     private AutoMapper autoMapper;
 
+
+    @Autowired
+    private IUserDmoService userDmoService;
     @Override
     public Class<User> getEntityClass() {
         return User.class;
@@ -62,5 +69,18 @@ public class UserRepository implements Repository<User> {
 
     }
 
+    @Override
+    public void batchInsert(List<User> users) {
 
+
+
+        List<UserDmo> userDmoList = users.stream().map(p -> autoMapper.map(p, UserDmo.class)).collect(Collectors.toList());
+
+        try {
+            userDmoService.saveBatch(userDmoList);
+        } catch (DuplicateKeyException ex) {
+            throw new EntityExistedException("用户已经存在") {
+            };
+        }
+    }
 }

@@ -14,7 +14,7 @@ buildscript {
 allprojects {
     group 'com.zhaofujun.nest'
 //    version '1.0-SNAPSHOT'
-    version '2.0.1'
+    version '2.0.4'
 }
 
 subprojects {
@@ -47,7 +47,7 @@ subprojects {
 
     dependencyManagement {
         dependencies {
-            dependency("com.zhaofujun.nest:nest-ddd:2.0.1")
+            dependency("com.zhaofujun.nest:nest-ddd:2.0.4")
             dependency("com.zhaofujun.automapper:automapper:1.2.RELEASE")
             dependency("org.aspectj:aspectjtools:1.9.3")
         }

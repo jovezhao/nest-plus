@@ -21,9 +21,14 @@ public class UserAppService implements UserService {
         User user = EntityFactory.create(User.class, StringIdentifier.valueOf("111"));
         user.init("老赵", 10);
 
+        user.changeAge(50);
         TestEventData eventData = new TestEventData();
         eventData.setData("test event data");
         eventBus.publish(eventData);
+
+
+        User use = EntityFactory.load(User.class, StringIdentifier.valueOf("111"));
+        use.changeAge(20);
     }
 
     public void changeAge() {

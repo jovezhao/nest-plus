@@ -4,7 +4,7 @@ include 'nest-plus-spring-activemq'
 include 'nest-plus-spring-redis'
 include 'nest-plus-spring-rabbitmq'
 include 'nest-plus-mybatis-paging'
-include 'nest-plus-demo'
 include 'nest-plus-spring-rocketmq'
 include 'nest-plus-spring-automapper'
 
+//include 'nest-plus-demo'

@@ -18,8 +18,8 @@ public class UserAppService implements UserService {
 
     public void create() {
 
-        User user = EntityFactory.create(User.class, StringIdentifier.valueOf("111"));
-        user.init("老赵", 10);
+        User user = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
+        user.init("老赵", 5);
 
         user.changeAge(50);
         TestEventData eventData = new TestEventData();
@@ -27,7 +27,7 @@ public class UserAppService implements UserService {
         eventBus.publish(eventData);
 
 
-        User use = EntityFactory.load(User.class, StringIdentifier.valueOf("111"));
+        User use = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
         use.changeAge(20);
     }
 

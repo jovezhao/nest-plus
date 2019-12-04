@@ -8,7 +8,156 @@ nest-plus集成了不仅仅集成了spring，还集成了activemq、rocketmq、r
 
 ## 快速开始
 
+> 参考演示代码 [nest-plus-demo](https://github.com/jovezhao/nest-plus/tree/master/nest-plus-demo)
+>
+### 第一步：添加引用
+**使用Maven方式添加引用**
 
+```xml
+<dependency>
+  <groupId>com.zhaofujun.nest</groupId>
+  <artifactId>nest-plus-spring-boot-starter</artifactId>
+  <version>2.0.5</version>
+</dependency>
+```
+*使用Gradle方式添加引用*
+
+```groovy
+implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.0.5'
+```
+
+在`nest-plus-spring-boot-starter`模块使用`SpringBeanContainerProvider`集成了Spring的IOC实现了Bean容器的支持
+使用`NestAspect`集成了Spring的AOP实现了应用服务的切面处理，自动完成对工作单元的提交。
+通过`NestAutoConfiguration`完成nest的自动配置，包括`NestApplication`和`EventBus`等。
+
+### 第二步：创建spring boot应用程序
+
+```java
+package com.zhaofujun.nest.demo;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+
+    }
+
+}
+
+```
+### 第三步：实现领域模型
+
+```java
+package com.zhaofujun.nest.demo.domain;
+
+import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.context.model.StringIdentifier;
+import com.zhaofujun.nest.core.BaseEntity;
+
+public class User extends BaseEntity<StringIdentifier> {
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void init(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void changeAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public void verify() {
+        if (age < 10) {
+            throw new EntityVerifyException("年龄太小了");
+        }
+    }
+}
+
+```
+
+
+### 第四步：添加应用服务
+```java
+package com.zhaofujun.nest.demo.application;
+
+import com.zhaofujun.nest.context.model.StringIdentifier;
+import com.zhaofujun.nest.core.EntityFactory;
+import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.demo.contract.TestEventData;
+import com.zhaofujun.nest.demo.contract.UserService;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.spring.AppService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@AppService
+public class UserAppService implements UserService {
+    
+    public void create() {
+
+        User user = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
+        user.init("老赵", 5);
+
+        user.changeAge(50);
+       
+        eventBus.publish(eventData);
+
+
+        User use = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
+        use.changeAge(20);
+    }
+
+    public void changeAge() {
+        User use = EntityFactory.load(User.class, StringIdentifier.valueOf("111"));
+        use.changeAge(20);
+    }
+
+}
+
+```
+
+### 第五步：添加Rest适配器
+
+```java
+package com.zhaofujun.nest.demo.adapter.rest;
+
+import com.zhaofujun.nest.demo.contract.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DemoController {
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/create")
+    public String create() {
+        userService.create();
+        return "publish";
+    }
+
+    @GetMapping("/change")
+    public String change() {
+        userService.changeAge();
+        return "change";
+    }
+}
+
+```
 ## 使用原则
 
 ### 异常处理

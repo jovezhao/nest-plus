@@ -26,7 +26,7 @@ nest-plus集成了不仅仅集成了spring，还集成了activemq、rocketmq、r
 implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.0.5'
 ```
 
-在`nest-plus-spring-boot-starter`模块使用`SpringBeanContainerProvider`集成了Spring的IOC实现了Bean容器的支持
+在`nest-plus-spring-boot-starter`模块使用`SpringBeanContainerProvider`集成了Spring的IOC来完成Bean容器的支持
 使用`NestAspect`集成了Spring的AOP实现了应用服务的切面处理，自动完成对工作单元的提交。
 通过`NestAutoConfiguration`完成nest的自动配置，包括`NestApplication`和`EventBus`等。
 
@@ -225,10 +225,127 @@ Nest为用户定义了两个级别的异常，分别是系统异常和业务异�
 
 使用六边形架构思想设计的产品，核心功能独立，与外部无直接依赖，方便基于mock的单元测试。
 
-## 集成Spring与Spring boot
-
 ## 缓存通道扩展与集成
 
+Nest支持用户自定义集成第三方缓存系统，只需要实现`com.zhaofujun.nest.cache.provider.CacheProvider`接口即可。
+
+在nest-plus中，使用`nest-plus-spring-redis`实现了对redis的集成，该集成方案基于`spring-boot-starter-data-redis`。
+
+如果您的项目中已经使用了`spring-boot-starter-data-redis`来集成redis，添加`nest-plus-spring-redis`模块的依赖即可完成redis的集成。
+
+如果您的项目没有使用过`spring-boot-starter-data-redis`，请参考[官方配置参数](https://spring.io/projects/spring-data-redis#overview)完成redis相关配置
+
+对应的缓存提供者代号为`com.zhaofujun.nest.redis.RedisCacheProvider.CODE`。
+
+**演示一：将领域实体使用redis来缓存**
+```java
+    package com.zhaofujun.nest.demo;
+    
+    import com.zhaofujun.nest.NestApplication;
+    import com.zhaofujun.nest.event.ApplicationEvent;
+    import com.zhaofujun.nest.event.ApplicationListener;
+    import com.zhaofujun.nest.event.ServiceContextListener;
+    import com.zhaofujun.nest.event.ServiceEvent;
+    import org.springframework.beans.BeansException;
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.ApplicationContextAware;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    
+    import java.lang.reflect.Method;
+    
+    @Configuration
+    public class DemoConfiguration   {
+        
+        @Bean
+        public CacheConfiguration entityCacheConfiguration() {
+            CacheConfiguration cacheConfiguration = new CacheConfiguration();
+            cacheConfiguration.setCacheCode(EntityCacheUtils.getCacheCode());
+            cacheConfiguration.setName("实体缓存策略");
+            cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
+            return cacheConfiguration;
+        }
+        
+    }
+
+```
+**演示二：将事件消息使用redis来存储**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+    @Bean
+    public CacheConfiguration messageStoreConfiguration() {
+        CacheConfiguration cacheConfiguration = new CacheConfiguration();
+        cacheConfiguration.setCacheCode(DefaultMessageStore.CACHE_CODE);
+        cacheConfiguration.setName("事件消息存储策略");
+        cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
+        return cacheConfiguration;
+    }
+
+}
+
+```
+
 ## 事件通道扩展与集成
+
+Nest支持用户自定义第三方消息中间件作为事件通道，集成第三方事件通道需要实现接口`com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer`
+
+在nest-plus中，我们完成了ActiveMQ、RabbitMQ和RocketMQ。
+
+### ActiveMQ的集成与使用
+在nest-plus中，添加`nest-plus-spring-activemq`模块即可完成ActiveMQ的集成，该模块使用`spring-boot-starter-activemq`为基础，相关配置参考[官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-jms)
+
+**演示：配置使用ActiveMQ通道发送事件**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+    @Bean
+    public EventConfiguration testEventConfiguration() {
+        EventConfiguration eventConfiguration = new EventConfiguration();
+        eventConfiguration.setEventCode(DemoEventData.Code);
+        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CHANNEL_CODE);
+        return eventConfiguration;
+    }
+
+}
+
+```
+
+### RabbitMQ的集成与使用
+
 
 ## 集成AutoMapper

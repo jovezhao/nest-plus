@@ -16,13 +16,13 @@ import java.lang.reflect.Method;
 @Configuration
 public class DemoConfiguration implements ApplicationContextAware {
 
-//    @Bean
-//    public EventConfiguration testEventConfiguration() {
-//        EventConfiguration eventConfiguration = new EventConfiguration();
-//        eventConfiguration.setEventCode(DemoEventData.Code);
-//        eventConfiguration.setMessageChannelCode(RocketMQMessageChannel.CHANNEL_CODE);
-//        return eventConfiguration;
-//    }
+    @Bean
+    public EventConfiguration testEventConfiguration() {
+        EventConfiguration eventConfiguration = new EventConfiguration();
+        eventConfiguration.setEventCode(DemoEventData.Code);
+        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CHANNEL_CODE);
+        return eventConfiguration;
+    }
 
 //    @Bean
 //    public CacheConfiguration messageStoreConfiguration() {
@@ -32,7 +32,7 @@ public class DemoConfiguration implements ApplicationContextAware {
 //        cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
 //        return cacheConfiguration;
 //    }
-//
+
 //    @Bean
 //    public CacheConfiguration entityCacheConfiguration() {
 //        CacheConfiguration cacheConfiguration = new CacheConfiguration();

@@ -528,7 +528,7 @@ public class DemoConfiguration   {
 AutoMapper提供Bean的映射能力，可以帮助我们将领域对象转换为DTO对象，以及领域对象与持久化对象的互相转换。
 AutoMapper允许目标对象对没有setter方法的字段进行映射。
 
-> AutoMapper的使用y就去参考[官方文档](https://github.com/jovezhao/automapper)
+> AutoMapper的使用请参考[官方文档](https://github.com/jovezhao/automapper)
 
 `nest-plus-spring-automapper`模块提供了AutoMapper的spring集成方式，并且内置了`LongIdentifierConverter`、`StringIdentifierConverter`,`UUIdentifierConverter`转换器，并且将`AutoMapper`类放入容器中，我们可以直接注入`IMapper`来获取AutoMapper的能力。
 

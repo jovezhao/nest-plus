@@ -3,7 +3,7 @@
 
 nest-plus是一套基于spring容器的nest的扩展。nest-plus简化了nest的使用方法，尤其是spring boot环境下。
 
-nest-plus集成了不仅仅集成了spring，还集成了activemq、rocketmq、rabbitmq、redis、automapper等组件，让nest的使用如丝更顺滑。
+nest-plus不仅仅集成了spring，还集成了activemq、rocketmq、rabbitmq、redis、automapper等组件，让nest的使用如丝更顺滑。
 
 
 ## 快速开始

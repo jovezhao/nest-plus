@@ -347,5 +347,76 @@ public class DemoConfiguration   {
 
 ### RabbitMQ的集成与使用
 
+在nest-plus中，添加`nest-plus-spring-rabbitmq`模块即可完成RabbitMQ的集成，该模块使用`spring-boot-starter-amqp`为基础，相关配置参考[官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-amqp)
+
+**演示：配置使用RabbitMQ通道发送事件**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+    @Bean
+    public EventConfiguration testEventConfiguration() {
+        EventConfiguration eventConfiguration = new EventConfiguration();
+        eventConfiguration.setEventCode(DemoEventData.Code);
+        eventConfiguration.setMessageChannelCode(RabbitMQMessageChannel.CHANNEL_CODE);
+        return eventConfiguration;
+    }
+
+}
+
+```
+
+### RocketMQ的集成与使用
+
+
+在nest-plus中，添加`nest-plus-spring-rocketmq`模块即可完成RabbitMQ的集成，该模块使用`org.apache.rocketmq:rocketmq-spring-boot-starter`为基础，相关配置参考[官方文档](https://github.com/apache/rocketmq-spring)
+
+**演示：配置使用RocketMQ通道发送事件**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+    @Bean
+    public EventConfiguration testEventConfiguration() {
+        EventConfiguration eventConfiguration = new EventConfiguration();
+        eventConfiguration.setEventCode(DemoEventData.Code);
+        eventConfiguration.setMessageChannelCode(RocketMQMessageChannel.CHANNEL_CODE);
+        return eventConfiguration;
+    }
+
+}
+```
 
 ## 集成AutoMapper

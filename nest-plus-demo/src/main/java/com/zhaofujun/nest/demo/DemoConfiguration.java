@@ -1,6 +1,11 @@
 package com.zhaofujun.nest.demo;
 
+import com.zhaofujun.automapper.builder.ClassMappingBuilder;
+import com.zhaofujun.automapper.converter.Converter;
+import com.zhaofujun.automapper.mapping.ClassMapping;
 import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
@@ -16,13 +21,13 @@ import java.lang.reflect.Method;
 @Configuration
 public class DemoConfiguration implements ApplicationContextAware {
 
-    @Bean
-    public EventConfiguration testEventConfiguration() {
-        EventConfiguration eventConfiguration = new EventConfiguration();
-        eventConfiguration.setEventCode(DemoEventData.Code);
-        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CHANNEL_CODE);
-        return eventConfiguration;
-    }
+//    @Bean
+//    public EventConfiguration testEventConfiguration() {
+//        EventConfiguration eventConfiguration = new EventConfiguration();
+//        eventConfiguration.setEventCode(DemoEventData.Code);
+//        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CHANNEL_CODE);
+//        return eventConfiguration;
+//    }
 
 //    @Bean
 //    public CacheConfiguration messageStoreConfiguration() {
@@ -41,6 +46,15 @@ public class DemoConfiguration implements ApplicationContextAware {
 //        cacheConfiguration.setProviderCode(RedisCacheProvider.CODE);
 //        return cacheConfiguration;
 //    }
+
+//    @Bean
+//    public ClassMapping UserDmo2Do() {
+//        return new ClassMappingBuilder(UserDmo.class, User.class, true)
+//                .field("id", "id")
+//                .builder();
+//    }
+//
+//
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

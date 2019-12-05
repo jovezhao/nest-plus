@@ -305,9 +305,112 @@ public class DemoConfiguration   {
 
 ## 事件通道扩展与集成
 
-Nest支持用户自定义第三方消息中间件作为事件通道，集成第三方事件通道需要实现接口`com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer`
+### 事件的发起与处理
 
-在nest-plus中，我们完成了ActiveMQ、RabbitMQ和RocketMQ。
+
+**演示：创建事件数据对象**
+```java
+package com.zhaofujun.nest.demo.contract;
+
+import com.zhaofujun.nest.core.EventData;
+
+public class TestEventData extends EventData {
+
+    public static final String Code="testEvent";
+    private String data;
+
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    @Override
+    public String getEventCode() {
+        return Code;
+    }
+
+
+    @Override
+    public String toString() {
+        return "TestEventData{" +
+                "data='" + data + '\'' +
+                '}';
+    }
+}
+
+```
+**发起事件**
+```java
+package com.zhaofujun.nest.demo.application;
+
+import com.zhaofujun.nest.context.model.StringIdentifier;
+import com.zhaofujun.nest.core.EntityFactory;
+import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.demo.contract.TestEventData;
+import com.zhaofujun.nest.demo.contract.UserService;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.spring.AppService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@AppService
+public class UserAppService implements UserService {
+
+    @Autowired
+    private EventBus eventBus;
+
+
+    public void create() {
+
+        User user = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
+        user.init("老赵", 5);
+
+        user.changeAge(50);
+        TestEventData eventData = new TestEventData();
+        eventData.setData("test event data");
+        eventBus.publish(eventData);
+
+
+        User use = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
+        use.changeAge(20);
+    }
+}
+
+```
+**处理事件**
+```java
+package com.zhaofujun.nest.demo.adapter.event;
+
+import com.zhaofujun.nest.context.event.EventArgs;
+import com.zhaofujun.nest.core.EventHandler;
+import com.zhaofujun.nest.demo.contract.TestEventData;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DemoEventHandle implements EventHandler<TestEventData> {
+    @Override
+    public String getEventCode() {
+        return TestEventData.Code;
+    }
+
+    @Override
+    public Class<TestEventData> getEventDataClass() {
+        return TestEventData.class;
+    }
+
+    @Override
+    public void handle(TestEventData testEventData, EventArgs eventArgs) {
+        System.out.println(testEventData.toString());
+    }
+}
+
+```
+Nest的事件处理通道默认使用本地事件通道，本地事件通道基于内存同步处理。当前也支持用户自定义第三方消息中间件作为事件通道，集成第三方事件通道需要实现接口`com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer`
+
+在nest-plus中，我们扩展了ActiveMQ、RabbitMQ和RocketMQ消息中间件的集成。
 
 ### ActiveMQ的集成与使用
 在nest-plus中，添加`nest-plus-spring-activemq`模块即可完成ActiveMQ的集成，该模块使用`spring-boot-starter-activemq`为基础，相关配置参考[官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-jms)
@@ -348,6 +451,7 @@ public class DemoConfiguration   {
 ### RabbitMQ的集成与使用
 
 在nest-plus中，添加`nest-plus-spring-rabbitmq`模块即可完成RabbitMQ的集成，该模块使用`spring-boot-starter-amqp`为基础，相关配置参考[官方文档](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-amqp)
+
 
 **演示：配置使用RabbitMQ通道发送事件**
 
@@ -420,3 +524,176 @@ public class DemoConfiguration   {
 ```
 
 ## 集成AutoMapper
+
+AutoMapper提供Bean的映射能力，可以帮助我们将领域对象转换为DTO对象，以及领域对象与持久化对象的互相转换。
+AutoMapper允许目标对象对没有setter方法的字段进行映射。
+
+> AutoMapper的使用y就去参考[官方文档](https://github.com/jovezhao/automapper)
+
+`nest-plus-spring-automapper`模块提供了AutoMapper的spring集成方式，并且内置了`LongIdentifierConverter`、`StringIdentifierConverter`,`UUIdentifierConverter`转换器，并且将`AutoMapper`类放入容器中，我们可以直接注入`IMapper`来获取AutoMapper的能力。
+
+**使用AutoMapper映射领域对象与持久化对象**
+```java
+package com.zhaofujun.nest.demo.infrastructure.repository;
+
+import com.zhaofujun.automapper.AutoMapper;
+import com.zhaofujun.nest.context.model.EntityExistedException;
+import com.zhaofujun.nest.core.EntityLoader;
+import com.zhaofujun.nest.core.Identifier;
+import com.zhaofujun.nest.core.Repository;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
+import com.zhaofujun.nest.demo.infrastructure.persistence.service.IUserDmoService;
+import com.zhaofujun.nest.demo.infrastructure.persistence.mapper.UserDmoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class UserRepository implements Repository<User> {
+
+    @Autowired
+    private UserDmoMapper userDmoMapper;
+
+    @Autowired
+    private AutoMapper autoMapper;
+
+
+    @Autowired
+    private IUserDmoService userDmoService;
+    @Override
+    public Class<User> getEntityClass() {
+        return User.class;
+    }
+
+    @Override
+    public User getEntityById(Identifier identifier, EntityLoader<User> entityLoader) {
+        UserDmo userDmo = userDmoMapper.selectById(identifier.toValue());
+
+        if (userDmo == null) return null;
+        User user = entityLoader.create(identifier);
+        autoMapper.map(userDmo, user);
+        return user;
+    }
+
+
+    @Override
+    public void insert(User use) {
+
+        UserDmo userDmo = autoMapper.map(use, UserDmo.class);
+        try {
+            userDmoMapper.insert(userDmo);
+        } catch (DuplicateKeyException ex) {
+            throw new EntityExistedException("用户已经存在") {
+            };
+        }
+    }
+
+    @Override
+    public void update(User use) {
+        UserDmo userDmo = autoMapper.map(use, UserDmo.class);
+
+        userDmoMapper.updateById(userDmo);
+    }
+
+    @Override
+    public void delete(User user) {
+        userDmoMapper.deleteById(user.getId().getId());
+
+    }
+
+    @Override
+    public void batchInsert(List<User> users) {
+
+
+
+        List<UserDmo> userDmoList = users.stream().map(p -> autoMapper.map(p, UserDmo.class)).collect(Collectors.toList());
+
+        try {
+            userDmoService.saveBatch(userDmoList);
+        } catch (DuplicateKeyException ex) {
+            throw new EntityExistedException("用户已经存在") {
+            };
+        }
+    }
+}
+
+```
+
+**自定义Mapper配置ClassMapping**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.automapper.builder.ClassMappingBuilder;
+import com.zhaofujun.automapper.mapping.ClassMapping;
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+
+    @Bean
+    public ClassMapping UserDmo2Do() {
+        return new ClassMappingBuilder(UserDmo.class, User.class, true)
+                .field("id", "id")
+                .builder();
+    }
+    
+}
+
+```
+
+**自定义转换器**
+
+```java
+
+package com.zhaofujun.nest.demo;
+
+import com.zhaofujun.automapper.builder.ClassMappingBuilder;
+import com.zhaofujun.automapper.mapping.ClassMapping;
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.reflect.Method;
+
+@Configuration
+public class DemoConfiguration   {
+
+
+    @Bean
+    public Converter TestConverter(){
+        return new TestConverter();
+    }
+    
+}
+
+```
+
+# 常见问题

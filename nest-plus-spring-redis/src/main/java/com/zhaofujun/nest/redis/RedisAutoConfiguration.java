@@ -1,9 +1,6 @@
 package com.zhaofujun.nest.redis;
 
-import com.zhaofujun.nest.core.BeanFinder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,4 +14,8 @@ public class RedisAutoConfiguration {
         return new RedisCacheProvider(stringRedisTemplate);
     }
 
+    @Bean
+    public RedisSequenceFactory redisSequenceFactory(StringRedisTemplate stringRedisTemplate) {
+        return new RedisSequenceFactory(stringRedisTemplate);
+    }
 }

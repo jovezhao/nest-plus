@@ -58,7 +58,7 @@ subprojects {
     }
     jar.enabled=true
 
-    apply from: "${rootProject.projectDir}/publish.gradle"
+//    apply from: "${rootProject.projectDir}/publish.gradle"
 }
 
 

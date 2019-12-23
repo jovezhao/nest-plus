@@ -49,7 +49,7 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new RocketMQMessageProducer(rocketMQTemplate);
+            messageProducer = new RocketMQMessageProducer(rocketMQTemplate,containerProvider);
         return messageProducer;
     }
 

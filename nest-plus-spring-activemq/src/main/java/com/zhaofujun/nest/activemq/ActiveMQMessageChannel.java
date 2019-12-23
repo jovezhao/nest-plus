@@ -46,7 +46,7 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new ActiveMQMessageProducer(jmsTemplate);
+            messageProducer = new ActiveMQMessageProducer(jmsTemplate,containerProvider);
         return messageProducer;
     }
 

@@ -3,18 +3,16 @@ package com.zhaofujun.nest.rocketmq;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
-import com.zhaofujun.nest.utils.JsonUtils;
+import com.zhaofujun.nest.json.JsonCreator;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.MQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.impl.consumer.DefaultMQPushConsumerImpl;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQProperties;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +25,11 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
     private Logger logger = LoggerFactory.getLogger(RocketMQMessageConsumer.class);
     private RocketMQProperties rocketMQProperties;
     private List<DefaultMQPushConsumer> consumers = new ArrayList<>();
+    private JsonCreator jsonCreator;
 
     public RocketMQMessageConsumer(RocketMQProperties rocketMQProperties, BeanFinder beanFinder) {
         super(beanFinder);
+        this.jsonCreator = new JsonCreator(beanFinder);
         this.rocketMQProperties = rocketMQProperties;
     }
 
@@ -47,8 +47,10 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
                     msgs.forEach(p -> {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
 
-                        MessageInfo messageInfo = JsonUtils.toObj(messageText, MessageInfo.class);
-
+                        MessageInfo messageInfo = jsonCreator.toObj(messageText, MessageInfo.class);
+                        String eventDataJson = jsonCreator.toJsonString(messageInfo.getData());
+                        Object o = jsonCreator.toObj(eventDataJson, eventHandler.getEventDataClass());
+                        messageInfo.setData((EventData) o);
                         onReceivedMessage(messageInfo, eventHandler, null);
                     });
 

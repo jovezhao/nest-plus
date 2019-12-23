@@ -2,8 +2,7 @@ package com.zhaofujun.nest.redis;
 
 import com.zhaofujun.nest.cache.provider.CacheProvider;
 import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.utils.JsonUtils;
-import org.springframework.context.ApplicationContext;
+import com.zhaofujun.nest.json.JsonCreator;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.HashMap;
@@ -14,9 +13,11 @@ public class RedisCacheProvider implements CacheProvider {
     public final static String CODE = "REDIS_CACHE_PROVIDER";
 
     private StringRedisTemplate redisTemplate;
+    private JsonCreator jsonCreator;
 
-    public RedisCacheProvider(StringRedisTemplate redisTemplate) {
+    public RedisCacheProvider(StringRedisTemplate redisTemplate,BeanFinder beanFinder) {
         this.redisTemplate = redisTemplate;
+        this.jsonCreator=new JsonCreator(beanFinder);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class RedisCacheProvider implements CacheProvider {
 
         Object json = redisTemplate.opsForHash().get(groupName, key);
         if (json != null)
-            return JsonUtils.toObj(json.toString(), clazz);
+            return jsonCreator.toObj(json.toString(), clazz);
         return null;
 
     }
@@ -52,7 +53,8 @@ public class RedisCacheProvider implements CacheProvider {
 
     @Override
     public void put(String groupName, String key, Object value, long idleSeconds) {
-        String json = JsonUtils.toJsonString(value);
+        String json = jsonCreator.toJsonString(value);
+
         redisTemplate.opsForHash().put(groupName, key, json);
         redisTemplate.expire(groupName,idleSeconds, TimeUnit.SECONDS);
     }

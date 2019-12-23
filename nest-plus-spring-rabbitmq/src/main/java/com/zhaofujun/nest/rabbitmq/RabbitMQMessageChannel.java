@@ -51,7 +51,7 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new RabbitMQMessageProducer(amqpTemplate, amqpAdmin);
+            messageProducer = new RabbitMQMessageProducer(amqpTemplate, amqpAdmin,containerProvider);
         return messageProducer;
     }
 

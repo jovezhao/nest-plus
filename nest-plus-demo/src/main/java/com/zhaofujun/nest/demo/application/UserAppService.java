@@ -5,6 +5,7 @@ import com.zhaofujun.nest.core.EntityFactory;
 import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.demo.contract.TestEventData;
 import com.zhaofujun.nest.demo.contract.UserService;
+import com.zhaofujun.nest.demo.domain.AppUser;
 import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.spring.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,11 @@ public class UserAppService implements UserService {
 
     public void create() {
 
-        User user = EntityFactory.createOrLoad(User.class, StringIdentifier.valueOf("111"));
-        user.init("老赵", 5);
+        AppUser user = EntityFactory.createOrLoad(AppUser.class, StringIdentifier.valueOf("111"));
+        user.init("老赵", 500);
 
         user.changeAge(50);
+        user.newAppId(1111);
         TestEventData eventData = new TestEventData();
         eventData.setData("test event data");
         eventBus.publish(eventData);

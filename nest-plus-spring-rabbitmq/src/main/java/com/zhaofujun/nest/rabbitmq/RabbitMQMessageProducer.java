@@ -1,18 +1,13 @@
 package com.zhaofujun.nest.rabbitmq;
 
-import com.rabbitmq.client.*;
-import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.utils.JsonUtils;
+import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.json.JsonCreator;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -21,8 +16,11 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
 
     private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
+    private JsonCreator jsonCreator;
 
-    public RabbitMQMessageProducer(AmqpTemplate amqpTemplate,AmqpAdmin amqpAdmin) {
+    public RabbitMQMessageProducer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
+        super(beanFinder);
+        this.jsonCreator=new JsonCreator(beanFinder);
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin=amqpAdmin;
     }
@@ -31,7 +29,7 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
     public void commit(String messageGroup, MessageInfo messageInfo) {
         amqpAdmin.declareExchange(new FanoutExchange(messageGroup));
 
-        amqpTemplate.convertAndSend(messageGroup, "", JsonUtils.toJsonString(messageInfo));
+        amqpTemplate.convertAndSend(messageGroup, "", jsonCreator.toJsonString(messageInfo));
 //        try {
 //
 //            channel = connection.createChannel();

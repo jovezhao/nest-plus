@@ -5,6 +5,7 @@ import com.zhaofujun.nest.context.model.EntityExistedException;
 import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
+import com.zhaofujun.nest.demo.domain.AppUser;
 import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
 import com.zhaofujun.nest.demo.infrastructure.persistence.service.IUserDmoService;
@@ -28,6 +29,7 @@ public class UserRepository implements Repository<User> {
 
     @Autowired
     private IUserDmoService userDmoService;
+
     @Override
     public Class<User> getEntityClass() {
         return User.class;
@@ -35,10 +37,17 @@ public class UserRepository implements Repository<User> {
 
     @Override
     public User getEntityById(Identifier identifier, EntityLoader<User> entityLoader) {
+
         UserDmo userDmo = userDmoMapper.selectById(identifier.toValue());
 
         if (userDmo == null) return null;
-        User user = entityLoader.create(identifier);
+
+        User user = null;
+        if (userDmo.getUserType() == UserDmo.APP_USER)
+            user = entityLoader.create(AppUser.class, identifier);
+        else
+            user = entityLoader.create(AppUser.class, identifier);
+
         autoMapper.map(userDmo, user);
         return user;
     }
@@ -48,6 +57,12 @@ public class UserRepository implements Repository<User> {
     public void insert(User use) {
 
         UserDmo userDmo = autoMapper.map(use, UserDmo.class);
+
+        if (use instanceof AppUser)
+            userDmo.setUserType(UserDmo.APP_USER);
+        else
+            userDmo.setUserType(UserDmo.WEB_USER);
+
         try {
             userDmoMapper.insert(userDmo);
         } catch (DuplicateKeyException ex) {
@@ -60,6 +75,10 @@ public class UserRepository implements Repository<User> {
     public void update(User use) {
         UserDmo userDmo = autoMapper.map(use, UserDmo.class);
 
+        if (use instanceof AppUser)
+            userDmo.setUserType(UserDmo.APP_USER);
+        else
+            userDmo.setUserType(UserDmo.WEB_USER);
         userDmoMapper.updateById(userDmo);
     }
 
@@ -71,7 +90,6 @@ public class UserRepository implements Repository<User> {
 
     @Override
     public void batchInsert(List<User> users) {
-
 
 
         List<UserDmo> userDmoList = users.stream().map(p -> autoMapper.map(p, UserDmo.class)).collect(Collectors.toList());

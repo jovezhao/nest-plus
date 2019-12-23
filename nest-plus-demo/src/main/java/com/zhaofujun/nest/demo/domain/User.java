@@ -1,10 +1,9 @@
 package com.zhaofujun.nest.demo.domain;
 
-import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.core.BaseEntity;
 
-public class User extends BaseEntity<StringIdentifier> {
+public abstract class User extends BaseEntity<StringIdentifier> {
     private String name;
     private int age;
 

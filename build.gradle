@@ -11,13 +11,13 @@ buildscript {
 }
 
 ext{
-    nestVersion="2.0.6"
+    nestVersion="2.0.8"
 }
 
 allprojects {
     group 'com.zhaofujun.nest'
 //    version '1.0-SNAPSHOT'
-    version "2.0.6"
+    version "2.0.8"
 }
 
 subprojects {
@@ -58,7 +58,7 @@ subprojects {
     }
     jar.enabled=true
 
-//    apply from: "${rootProject.projectDir}/publish.gradle"
+    apply from: "${rootProject.projectDir}/publish.gradle"
 }
 
 

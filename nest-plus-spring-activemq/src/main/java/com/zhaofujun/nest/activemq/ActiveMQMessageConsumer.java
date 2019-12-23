@@ -1,10 +1,11 @@
 package com.zhaofujun.nest.activemq;
 
 import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
-import com.zhaofujun.nest.utils.JsonUtils;
+import com.zhaofujun.nest.json.JsonCreator;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.jms.core.JmsTemplate;
 
@@ -14,10 +15,12 @@ import javax.jms.*;
 public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
     private JmsTemplate jmsTemplate;
+    private JsonCreator jsonCreator;
     private volatile boolean running = false;
 
     public ActiveMQMessageConsumer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
         super(beanFinder);
+        jsonCreator=new JsonCreator(beanFinder);
         this.jmsTemplate = jmsTemplate;
     }
 
@@ -36,8 +39,10 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }
-                    MessageInfo messageInfo = JsonUtils.toObj(messageText, MessageInfo.class);
-
+                    MessageInfo messageInfo = jsonCreator.toObj(messageText, MessageInfo.class);
+                    String eventDataJson = jsonCreator.toJsonString(messageInfo.getData());
+                    Object o = jsonCreator.toObj(eventDataJson, eventHandler.getEventDataClass());
+                    messageInfo.setData((EventData) o);
                     onReceivedMessage(messageInfo, eventHandler, null);
                 }
             }

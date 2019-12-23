@@ -33,7 +33,7 @@
                 // https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
                 pom {
                     name = "Nest-Plus"
-                    description = "A framework for DDD"
+                    description = "spring for nest"
                     url = "https://github.com/jovezhao/nest-plus"
                     licenses {
                         license {
@@ -51,7 +51,7 @@
                     scm {
                         connection = "scm:git:https://github.com/jovezhao/nest-plus"
                         developerConnection = "scm:git:https://github.com/jovezhao/nest-plus"
-                        url = "https://github.com/jovezhao/nest"
+                        url = "https://github.com/jovezhao/nest-plus"
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.rabbitmq;
 
+import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
@@ -16,13 +17,13 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
     private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
-    private JsonCreator jsonCreator;
+    private MessageConverter messageConverter;
     private volatile boolean running = false;
 
 
     public RabbitMQMessageConsumer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
         super(beanFinder);
-        this.jsonCreator=new JsonCreator(beanFinder);
+        this.messageConverter=new MessageConverter(beanFinder);
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
     }
@@ -45,10 +46,9 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
                     Object message = amqpTemplate.receiveAndConvert(eventHandler.getClass().getSimpleName());
                     if (message != null) {
-                        MessageInfo messageInfo = jsonCreator.toObj(message.toString(), MessageInfo.class);
-                        String eventDataJson = jsonCreator.toJsonString(messageInfo.getData());
-                        Object o = jsonCreator.toObj(eventDataJson, eventHandler.getEventDataClass());
-                        messageInfo.setData((EventData) o);
+
+                        MessageInfo messageInfo = messageConverter.fromString(message.toString(), eventHandler.getEventDataClass());
+
                         onReceivedMessage(messageInfo, eventHandler, null);
                     }
                 }

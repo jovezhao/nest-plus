@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.rocketmq;
 
+import com.google.gson.JsonObject;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
+import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventData;
@@ -25,11 +27,11 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
     private Logger logger = LoggerFactory.getLogger(RocketMQMessageConsumer.class);
     private RocketMQProperties rocketMQProperties;
     private List<DefaultMQPushConsumer> consumers = new ArrayList<>();
-    private JsonCreator jsonCreator;
+    private MessageConverter messageConverter;
 
     public RocketMQMessageConsumer(RocketMQProperties rocketMQProperties, BeanFinder beanFinder) {
         super(beanFinder);
-        this.jsonCreator = new JsonCreator(beanFinder);
+        this.messageConverter = new MessageConverter(beanFinder);
         this.rocketMQProperties = rocketMQProperties;
     }
 
@@ -46,11 +48,7 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
                     msgs.forEach(p -> {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
-
-                        MessageInfo messageInfo = jsonCreator.toObj(messageText, MessageInfo.class);
-                        String eventDataJson = jsonCreator.toJsonString(messageInfo.getData());
-                        Object o = jsonCreator.toObj(eventDataJson, eventHandler.getEventDataClass());
-                        messageInfo.setData((EventData) o);
+                        MessageInfo messageInfo = messageConverter.fromString(messageText, eventHandler.getEventDataClass());
                         onReceivedMessage(messageInfo, eventHandler, null);
                     });
 

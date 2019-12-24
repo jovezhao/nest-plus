@@ -48,7 +48,13 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
                     msgs.forEach(p -> {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
-                        MessageInfo messageInfo = messageConverter.fromString(messageText, eventHandler.getEventDataClass());
+                        MessageInfo messageInfo;
+                        try {
+                            messageInfo = messageConverter.fromString(messageText, eventHandler.getEventDataClass());
+                        } catch (Exception ex) {
+                            logger.warn("反序列化失败，消息体：" + messageText, ex);
+                            return;
+                        }
                         onReceivedMessage(messageInfo, eventHandler, null);
                     });
 

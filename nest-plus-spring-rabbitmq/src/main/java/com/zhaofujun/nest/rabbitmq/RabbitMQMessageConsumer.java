@@ -7,6 +7,8 @@ import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.json.JsonCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 
 
@@ -15,6 +17,7 @@ import org.springframework.amqp.core.*;
  **/
 public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
+    private Logger logger = LoggerFactory.getLogger(RabbitMQMessageConsumer.class);
     private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
     private MessageConverter messageConverter;
@@ -23,7 +26,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
     public RabbitMQMessageConsumer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
         super(beanFinder);
-        this.messageConverter=new MessageConverter(beanFinder);
+        this.messageConverter = new MessageConverter(beanFinder);
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
     }
@@ -47,8 +50,13 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
                     Object message = amqpTemplate.receiveAndConvert(eventHandler.getClass().getSimpleName());
                     if (message != null) {
 
-                        MessageInfo messageInfo = messageConverter.fromString(message.toString(), eventHandler.getEventDataClass());
-
+                        MessageInfo messageInfo;
+                        try {
+                            messageInfo = messageConverter.fromString(message.toString(), eventHandler.getEventDataClass());
+                        } catch (Exception ex) {
+                            logger.warn("反序列化失败，消息体：" + message, ex);
+                            break;
+                        }
                         onReceivedMessage(messageInfo, eventHandler, null);
                     }
                 }

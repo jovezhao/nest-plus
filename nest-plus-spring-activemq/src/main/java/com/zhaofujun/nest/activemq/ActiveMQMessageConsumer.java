@@ -20,12 +20,11 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
     private Logger logger = LoggerFactory.getLogger(ActiveMQMessageConsumer.class);
     private JmsTemplate jmsTemplate;
-    private MessageConverter messageConverter;
+
     private volatile boolean running = false;
 
     public ActiveMQMessageConsumer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
         super(beanFinder);
-        messageConverter = new MessageConverter(beanFinder);
         this.jmsTemplate = jmsTemplate;
     }
 
@@ -47,7 +46,7 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                         break;
                     }
                     try {
-                        messageInfo = messageConverter.fromString(messageText, eventHandler.getEventDataClass());
+                        messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
                     } catch (Exception ex) {
                         logger.warn("反序列化失败，消息体：" + messageText, ex);
                         break;

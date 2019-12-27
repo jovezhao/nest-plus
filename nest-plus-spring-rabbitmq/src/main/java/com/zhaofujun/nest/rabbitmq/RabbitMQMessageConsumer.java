@@ -20,13 +20,11 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
     private Logger logger = LoggerFactory.getLogger(RabbitMQMessageConsumer.class);
     private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
-    private MessageConverter messageConverter;
     private volatile boolean running = false;
 
 
     public RabbitMQMessageConsumer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
         super(beanFinder);
-        this.messageConverter = new MessageConverter(beanFinder);
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
     }
@@ -52,7 +50,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
                         MessageInfo messageInfo;
                         try {
-                            messageInfo = messageConverter.fromString(message.toString(), eventHandler.getEventDataClass());
+                            messageInfo = getMessageConverter().jsonToMessage(message.toString(), eventHandler.getEventDataClass());
                         } catch (Exception ex) {
                             logger.warn("反序列化失败，消息体：" + message, ex);
                             break;

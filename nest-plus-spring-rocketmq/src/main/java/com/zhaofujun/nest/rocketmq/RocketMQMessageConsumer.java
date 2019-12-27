@@ -27,11 +27,9 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
     private Logger logger = LoggerFactory.getLogger(RocketMQMessageConsumer.class);
     private RocketMQProperties rocketMQProperties;
     private List<DefaultMQPushConsumer> consumers = new ArrayList<>();
-    private MessageConverter messageConverter;
 
     public RocketMQMessageConsumer(RocketMQProperties rocketMQProperties, BeanFinder beanFinder) {
         super(beanFinder);
-        this.messageConverter = new MessageConverter(beanFinder);
         this.rocketMQProperties = rocketMQProperties;
     }
 
@@ -50,7 +48,7 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
                         MessageInfo messageInfo;
                         try {
-                            messageInfo = messageConverter.fromString(messageText, eventHandler.getEventDataClass());
+                            messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
                         } catch (Exception ex) {
                             logger.warn("反序列化失败，消息体：" + messageText, ex);
                             return;

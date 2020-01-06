@@ -26,7 +26,7 @@ public abstract class User extends BaseEntity<StringIdentifier> {
 
     @Override
     public void verify() {
-        if (age < 10) {
+        if (age != 0 && age < 10) {
             throw new EntityVerifyException("年龄太小了");
         }
     }

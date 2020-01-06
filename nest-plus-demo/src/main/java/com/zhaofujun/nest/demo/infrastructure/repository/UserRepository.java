@@ -7,6 +7,7 @@ import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.demo.domain.AppUser;
 import com.zhaofujun.nest.demo.domain.User;
+import com.zhaofujun.nest.demo.domain.WebUser;
 import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
 import com.zhaofujun.nest.demo.infrastructure.persistence.service.IUserDmoService;
 import com.zhaofujun.nest.demo.infrastructure.persistence.mapper.UserDmoMapper;
@@ -46,7 +47,7 @@ public class UserRepository implements Repository<User> {
         if (userDmo.getUserType() == UserDmo.APP_USER)
             user = entityLoader.create(AppUser.class, identifier);
         else
-            user = entityLoader.create(AppUser.class, identifier);
+            user = entityLoader.create(WebUser.class, identifier);
 
         autoMapper.map(userDmo, user);
         return user;
@@ -88,17 +89,17 @@ public class UserRepository implements Repository<User> {
 
     }
 
-    @Override
-    public void batchInsert(List<User> users) {
-
-
-        List<UserDmo> userDmoList = users.stream().map(p -> autoMapper.map(p, UserDmo.class)).collect(Collectors.toList());
-
-        try {
-            userDmoService.saveBatch(userDmoList);
-        } catch (DuplicateKeyException ex) {
-            throw new EntityExistedException("用户已经存在") {
-            };
-        }
-    }
+//    @Override
+//    public void batchInsert(List<User> users) {
+//
+//
+//        List<UserDmo> userDmoList = users.stream().map(p -> autoMapper.map(p, UserDmo.class)).collect(Collectors.toList());
+//
+//        try {
+//            userDmoService.saveBatch(userDmoList);
+//        } catch (DuplicateKeyException ex) {
+//            throw new EntityExistedException("用户已经存在") {
+//            };
+//        }
+//    }
 }

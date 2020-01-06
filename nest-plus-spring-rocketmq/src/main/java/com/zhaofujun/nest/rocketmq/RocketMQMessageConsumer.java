@@ -1,13 +1,9 @@
 package com.zhaofujun.nest.rocketmq;
 
-import com.google.gson.JsonObject;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
-import com.zhaofujun.nest.json.JsonCreator;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;

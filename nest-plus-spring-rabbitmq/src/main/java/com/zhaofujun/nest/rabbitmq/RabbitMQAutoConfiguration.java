@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQAutoConfiguration {
 
     @Bean
-    public RabbitMQMessageChannel activeMQMessageChannel(ContainerProvider containerProvider, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, NestApplication nestApplication) {
+    public RabbitMQMessageChannel rabbitMQMessageChannel(ContainerProvider containerProvider, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, NestApplication nestApplication) {
         return new RabbitMQMessageChannel(containerProvider, amqpTemplate, amqpAdmin, nestApplication);
     }
 

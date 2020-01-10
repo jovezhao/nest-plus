@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class RocketMQAutoConfiguration {
 
     @Bean
-    public RocketMQMessageChannel activeMQMessageChannel(ContainerProvider containerProvider, RocketMQProperties rocketMQProperties, RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
+    public RocketMQMessageChannel rocketMQMessageChannel(ContainerProvider containerProvider, RocketMQProperties rocketMQProperties, RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
         return new RocketMQMessageChannel(containerProvider, rocketMQProperties, rocketMQTemplate, nestApplication);
     }
 

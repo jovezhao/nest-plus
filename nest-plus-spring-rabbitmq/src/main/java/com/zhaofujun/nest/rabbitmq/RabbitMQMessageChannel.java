@@ -23,8 +23,10 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
     private NestApplication nestApplication;
+    private DefaultMessageListenerContainer defaultMessageListenerContainer;
 
-    public RabbitMQMessageChannel(ContainerProvider containerProvider, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, NestApplication nestApplication) {
+    public RabbitMQMessageChannel(DefaultMessageListenerContainer defaultMessageListenerContainer, ContainerProvider containerProvider, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, NestApplication nestApplication) {
+        this.defaultMessageListenerContainer = defaultMessageListenerContainer;
         this.containerProvider = containerProvider;
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
@@ -51,7 +53,7 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new RabbitMQMessageProducer(amqpTemplate, amqpAdmin,containerProvider);
+            messageProducer = new RabbitMQMessageProducer(amqpTemplate, amqpAdmin, containerProvider);
         return messageProducer;
     }
 
@@ -59,7 +61,7 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if (messageConsumer == null)
-            messageConsumer = new RabbitMQMessageConsumer(amqpTemplate, amqpAdmin, this.containerProvider);
+            messageConsumer = new RabbitMQMessageConsumer(defaultMessageListenerContainer, amqpAdmin, this.containerProvider);
         return messageConsumer;
     }
 

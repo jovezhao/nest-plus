@@ -18,7 +18,7 @@ public class DemoController {
 
     @GetMapping("/create")
     public String create() {
-        orderService.create();
+        userService.create();
         return "publish";
     }
 

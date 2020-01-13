@@ -1,12 +1,9 @@
 package com.zhaofujun.nest.rabbitmq;
 
-import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.json.JsonCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -15,18 +12,19 @@ import org.springframework.amqp.core.*;
 /**
  *
  **/
-public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
+public class RabbitMQMessageConsumer extends DistributeMessageConsumer implements ReceivedMessageHandler {
 
     private Logger logger = LoggerFactory.getLogger(RabbitMQMessageConsumer.class);
-    private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
-    private volatile boolean running = false;
+    private DefaultMessageListenerContainer defaultMessageListenerContainer;
 
 
-    public RabbitMQMessageConsumer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
+    public RabbitMQMessageConsumer(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
         super(beanFinder);
-        this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
+        this.defaultMessageListenerContainer = defaultMessageListenerContainer;
+        this.defaultMessageListenerContainer.setMessageConverter(getMessageConverter());
+        this.defaultMessageListenerContainer.setReceivedMessageHandler(this);
     }
 
     @Override
@@ -40,33 +38,10 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
                 .to(fanoutExchange);
         amqpAdmin.declareBinding(binding);
 
-        running = true;
-        while (running) {
-            for (int i = 0; i < 10; i++) {
-                if (running) {
-
-                    Object message = amqpTemplate.receiveAndConvert(eventHandler.getClass().getSimpleName());
-                    if (message != null) {
-
-                        MessageInfo messageInfo;
-                        try {
-                            messageInfo = getMessageConverter().jsonToMessage(message.toString(), eventHandler.getEventDataClass());
-                        } catch (Exception ex) {
-                            logger.warn("反序列化失败，消息体：" + message, ex);
-                            break;
-                        }
-                        onReceivedMessage(messageInfo, eventHandler, null);
-
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onFailed(EventHandler eventHandler, Object context, Exception ex) {
+        defaultMessageListenerContainer.addHandler(queue.getName(), eventHandler);
 
     }
+
 
     @Override
     protected void onEnds(EventHandler eventHandler, Object context) {
@@ -75,6 +50,11 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
     @Override
     public void stop() {
-        this.running = false;
+        defaultMessageListenerContainer.stop();
+    }
+
+    @Override
+    public void receivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
+        onReceivedMessage(messageInfo, eventHandler, context);
     }
 }

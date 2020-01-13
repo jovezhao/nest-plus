@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.demo.adapter.event;
 
+import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.context.event.EventArgs;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.demo.contract.TestEventData;
@@ -20,5 +21,8 @@ public class DemoEventHandle implements EventHandler<TestEventData> {
     @Override
     public void handle(TestEventData testEventData, EventArgs eventArgs) {
         System.out.println(testEventData.toString());
+        throw new CustomException(1, "22") {
+
+        };
     }
 }

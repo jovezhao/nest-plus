@@ -56,6 +56,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
                             break;
                         }
                         onReceivedMessage(messageInfo, eventHandler, null);
+
                     }
                 }
             }

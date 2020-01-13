@@ -5,6 +5,8 @@ import com.zhaofujun.automapper.converter.Converter;
 import com.zhaofujun.automapper.mapping.ClassMapping;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.configuration.CacheConfiguration;
+import com.zhaofujun.nest.configuration.EventConfiguration;
+import com.zhaofujun.nest.demo.contract.TestEventData;
 import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.demo.infrastructure.persistence.UserDmo;
 import com.zhaofujun.nest.event.ApplicationEvent;
@@ -12,6 +14,7 @@ import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
 import com.zhaofujun.nest.event.ServiceEvent;
 import com.zhaofujun.nest.redis.RedisCacheProvider;
+import com.zhaofujun.nest.rocketmq.RocketMQMessageChannel;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -24,13 +27,13 @@ import java.lang.reflect.Method;
 @Configuration
 public class DemoConfiguration implements ApplicationContextAware {
 
-//    @Bean
-//    public EventConfiguration testEventConfiguration() {
-//        EventConfiguration eventConfiguration = new EventConfiguration();
-//        eventConfiguration.setEventCode(DemoEventData.Code);
-//        eventConfiguration.setMessageChannelCode(ActiveMQMessageChannel.CHANNEL_CODE);
-//        return eventConfiguration;
-//    }
+    @Bean
+    public EventConfiguration testEventConfiguration() {
+        EventConfiguration eventConfiguration = new EventConfiguration();
+        eventConfiguration.setEventCode(TestEventData.Code);
+        eventConfiguration.setMessageChannelCode(RocketMQMessageChannel.CHANNEL_CODE);
+        return eventConfiguration;
+    }
 
 //    @Bean
 //    public CacheConfiguration messageStoreConfiguration() {

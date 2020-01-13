@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.activemq;
 
+import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventData;
@@ -35,6 +37,7 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
             for (int i = 0; i < 10; i++) {
                 if (running) {
                     Queue queue = new ActiveMQQueue("Consumer." + eventHandler.getClass().getSimpleName() + ".VirtualTopic." + eventHandler.getEventCode());
+                    jmsTemplate.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
                     Message message = jmsTemplate.receive(queue);
                     TextMessage textMessage = (TextMessage) message;
                     MessageInfo messageInfo;
@@ -51,7 +54,24 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                         logger.warn("反序列化失败，消息体：" + messageText, ex);
                         break;
                     }
-                    onReceivedMessage(messageInfo, eventHandler, null);
+
+                    try {
+                        onReceivedMessage(messageInfo, eventHandler, null);
+                        try {
+                            textMessage.acknowledge();
+                        } catch (JMSException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (CustomException ex) {
+                        //发生业务异常，消息做成功消费处理
+                        try {
+                            textMessage.acknowledge();
+                        } catch (JMSException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (SystemException ex) {
+                        //发生系统异常，不应答，让消息退回
+                    }
                 }
             }
         }

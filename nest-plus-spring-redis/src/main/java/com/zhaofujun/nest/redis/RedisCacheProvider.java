@@ -5,6 +5,7 @@ import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.json.JsonCreator;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -26,24 +27,24 @@ public class RedisCacheProvider implements CacheProvider {
     }
 
     @Override
-    public <T> T get(String groupName, String key, Class<T> clazz) {
+    public <T> T get(String groupName, String key, Type type) {
 
         Object json = redisTemplate.opsForHash().get(groupName, key);
         if (json != null)
-            return jsonCreator.toObj(json.toString(), clazz);
+            return jsonCreator.toObj(json.toString(), type);
         return null;
 
     }
 
     @Override
-    public <T> Map<String, T> get(String groupName, Class<T> clazz, String... keys) {
+    public <T> Map<String, T> get(String groupName, Type type, String... keys) {
 
 
         Map<String, T> result = new HashMap<>();
 
 
         for (String key : keys) {
-            T t = get(groupName, key, clazz);
+            T t = get(groupName, key, type);
             if (t != null)
                 result.put(key, t);
         }

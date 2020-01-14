@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.demo.adapter.rest;
 
+import com.zhaofujun.nest.demo.application.TeacherAppService;
 import com.zhaofujun.nest.demo.contract.OrderService;
 import com.zhaofujun.nest.demo.contract.UserService;
 import com.zhaofujun.nest.spring.AppService;
@@ -16,15 +17,17 @@ public class DemoController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private TeacherAppService teacherAppService;
     @GetMapping("/create")
     public String create() {
-        userService.create();
+        teacherAppService.create();
         return "publish";
     }
 
     @GetMapping("/get")
     public String get() {
-        orderService.get();
+        teacherAppService.get();
         return "get";
     }
 }

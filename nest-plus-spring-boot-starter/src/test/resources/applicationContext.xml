@@ -13,7 +13,7 @@
     <bean class="com.zhaofujun.nest.NestApplication">
         <constructor-arg ref="beanContainerProvider"/>
     </bean>
-    <bean class="com.zhaofujun.nest.context.event.EventBus">
+    <bean class="com.zhaofujun.nest.context.event.DefaultEventBus">
         <constructor-arg ref="beanContainerProvider"/>
     </bean>
 

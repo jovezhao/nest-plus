@@ -23,6 +23,8 @@ public class Application {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 //        ContainerProvider beanContainerProvider = applicationContext.getBean(ContainerProvider.class);
         NestApplication nestApplication = applicationContext.getBean(NestApplication.class);// new NestApplication(beanContainerProvider);
+
+
         nestApplication.addApplicationListener(new ApplicationListener() {
             @Override
             public void applicationStarted(ApplicationEvent applicationEvent) {
@@ -88,8 +90,10 @@ public class Application {
     ContainerProvider containerProvider;
 
     public void run() {
-        eventBus.autoRegister();
-        testAppservices.createUser("111", "pwd");
+//        eventBus.autoRegister();
+//        testAppservices.createUser("111", "pwd");
+
+
     }
 }
 

@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.demo.adapter.event;
 
 import com.zhaofujun.nest.CustomException;
-import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.EventArgs;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.demo.contract.TestEventData;

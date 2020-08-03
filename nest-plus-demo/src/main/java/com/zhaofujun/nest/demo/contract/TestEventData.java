@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.demo.contract;
 
-import com.zhaofujun.nest.core.EventData;
+
+import com.zhaofujun.nest.standard.EventData;
 
 public class TestEventData extends EventData {
 

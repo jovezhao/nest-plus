@@ -9,17 +9,15 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 public class RocketMQMessageProducer extends DistributeMessageProducer {
 
     private RocketMQTemplate rocketMQTemplate;
-    private JsonCreator jsonCreator;
 
     public RocketMQMessageProducer(RocketMQTemplate rocketMQTemplate, BeanFinder beanFinder) {
         super(beanFinder);
-        this.jsonCreator=new JsonCreator(beanFinder);
         this.rocketMQTemplate = rocketMQTemplate;
     }
 
     @Override
     public void commit(String messageGroup, MessageInfo messageInfo) {
-        String json = jsonCreator.toJsonString(messageInfo);
+        String json = getMessageConverter().messageToString(messageInfo);
         rocketMQTemplate.convertAndSend(messageGroup, json);
 
     }

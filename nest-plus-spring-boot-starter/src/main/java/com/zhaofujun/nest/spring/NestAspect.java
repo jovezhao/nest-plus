@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.*;
+import com.zhaofujun.nest.context.ContextUnitOfWork;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,6 +9,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Modifier;
 
 @Component
 @Aspect
@@ -17,12 +21,22 @@ public class NestAspect {
     private BeanFinder beanFinder;
 
     @Around("execution(public * *(..)) && @within(com.zhaofujun.nest.spring.AppService)")
-    public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable{
+    public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
 
         NestApplication application = beanFinder.getInstance(NestApplication.class);
 
-        ServiceContext serviceContext =application.newInstance(joinPoint.getSignature().getDeclaringType());
+        ServiceContext serviceContext = application.newInstance(joinPoint.getSignature().getDeclaringType());
 
+        Object result = invoke(joinPoint);
+
+
+        commit(serviceContext.getContextUnitOfWork());
+
+        return result;
+
+    }
+
+    private Object invoke(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result = null;
         try {
             result = joinPoint.proceed();
@@ -45,9 +59,12 @@ public class NestAspect {
                 throw new SystemException("系统异常", ex);
             }
         }
-
-        serviceContext.getContextUnitOfWork().commit();
-
         return result;
+    }
+
+
+    @Transactional
+    public void commit(ContextUnitOfWork unitOfWork) {
+        unitOfWork.commit();
     }
 }

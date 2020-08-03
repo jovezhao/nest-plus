@@ -16,20 +16,19 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
 
     private AmqpTemplate amqpTemplate;
     private AmqpAdmin amqpAdmin;
-    private JsonCreator jsonCreator;
 
     public RabbitMQMessageProducer(AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
         super(beanFinder);
-        this.jsonCreator=new JsonCreator(beanFinder);
         this.amqpTemplate = amqpTemplate;
-        this.amqpAdmin=amqpAdmin;
+        this.amqpAdmin = amqpAdmin;
     }
 
     @Override
     public void commit(String messageGroup, MessageInfo messageInfo) {
         amqpAdmin.declareExchange(new FanoutExchange(messageGroup));
+        String json = getMessageConverter().messageToString(messageInfo);
 
-        amqpTemplate.convertAndSend(messageGroup, "", jsonCreator.toJsonString(messageInfo));
+        amqpTemplate.convertAndSend(messageGroup, "", json);
 //        try {
 //
 //            channel = connection.createChannel();

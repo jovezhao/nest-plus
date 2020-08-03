@@ -1,4 +1,5 @@
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework:spring-tx")
     compile 'org.aspectj:aspectjtools'
 }

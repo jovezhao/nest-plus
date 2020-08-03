@@ -2,9 +2,7 @@ package com.zhaofujun.nest.activemq;
 
 import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;

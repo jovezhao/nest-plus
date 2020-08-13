@@ -1,0 +1,14 @@
+dependencies {
+/*    testCompile group: 'junit', name: 'junit', version: '4.12'*/
+    compile('com.aliyun.openservices:ons-client:1.8.7.1.Final')
+
+    compile('com.aliyun:aliyun-java-sdk-core:4.5.1')
+
+    compile('com.aliyun:aliyun-java-sdk-ons:3.1.5')
+
+    compile('org.projectlombok:lombok:1.18.8')
+
+    compile('org.springframework.boot:spring-boot-starter')
+
+    compile('org.springframework.boot:spring-boot-configuration-processor')
+}

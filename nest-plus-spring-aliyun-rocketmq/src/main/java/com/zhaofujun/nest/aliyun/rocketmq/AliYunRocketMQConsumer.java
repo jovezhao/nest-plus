@@ -38,7 +38,7 @@ public class AliYunRocketMQConsumer extends DistributeMessageConsumer {
                     onReceivedMessage(messageInfo,eventHandler,null);
                     return Action.CommitMessage;
                 }catch (Exception e){
-                    log.error("消息:{}消费失败,失败原因为:"+messageInfo,e.getMessage());
+                    //log.error("消息:{}消费失败,失败原因为:"+messageInfo,e.getMessage());
                    return Action.ReconsumeLater;
                 }
             }

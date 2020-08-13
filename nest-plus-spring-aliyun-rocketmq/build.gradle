@@ -12,3 +12,6 @@ dependencies {
 
     compile('org.springframework.boot:spring-boot-configuration-processor')
 }
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

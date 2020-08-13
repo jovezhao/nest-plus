@@ -132,7 +132,7 @@ public class AliYunRocketMQAutoConfiguration {
                         try {
                            iAcsClient.getAcsResponse(createRequest);
                         } catch (ClientException e) {
-                            log.error("创建阿里云ROCKETMQ的TOPIC:{}失败,原因为:{}",n.getEventCode(),e.getMessage());
+                            //log.error("创建阿里云ROCKETMQ的TOPIC:{}失败,原因为:{}",n.getEventCode(),e.getMessage());
                             e.printStackTrace();
                         }
                     }

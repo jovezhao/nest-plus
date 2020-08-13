@@ -11,13 +11,17 @@ buildscript {
 }
 
 ext{
-    nestVersion="2.0.21"
+    nestVersion="2.0.24"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 allprojects {
     group 'com.zhaofujun.nest'
 //    version '1.0-SNAPSHOT'
-    version "2.0.21"
+    version "2.0.24"
 }
 
 subprojects {
@@ -39,6 +43,16 @@ subprojects {
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
     }
+    javadoc {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            author true
+            version true
+            links "http://docs.oracle.com/javase/7/docs/api"
+            title "这里写文档标题"
+        }
+    }
 
     dependencies {
 
@@ -58,7 +72,18 @@ subprojects {
     }
     jar.enabled=true
 
-    apply from: "${rootProject.projectDir}/publish.gradle"
+    //apply from: "${rootProject.projectDir}/publish.gradle"
+    uploadArchives {
+        repositories.mavenDeployer {
+            snapshotRepository(url: "http://192.168.2.251:8081/repository/maven-snapshots/") {//快照
+                authentication(userName: "admin", password: "uplooking@123")
+            }
+            repository(url: "http://192.168.2.251:8081/repository/maven-releases/") {//RELEASE
+                authentication(userName: "admin", password: "uplooking@123")
+            }
+
+        }
+    }
 }
 
 

@@ -12,14 +12,10 @@ buildscript {
 
 ext{
     nestVersion="2.0.24"
-<<<<<<< HEAD
+
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-=======
->>>>>>> 08d9f193556e7621cc178c32d02932cc709dc1da
-}
+
 
 allprojects {
     group 'com.zhaofujun.nest'
@@ -42,21 +38,6 @@ subprojects {
 
     sourceCompatibility = '1.8'
 
-
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-    }
-    javadoc {
-        options{
-            encoding "UTF-8"
-            charSet 'UTF-8'
-            author true
-            version true
-            links "http://docs.oracle.com/javase/7/docs/api"
-            title "这里写文档标题"
-        }
-    }
-
     dependencies {
 
         compile('com.zhaofujun.nest:nest-ddd')
@@ -76,6 +57,21 @@ subprojects {
     jar.enabled=true
 
     apply from: "${rootProject.projectDir}/publish.gradle"
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+    javadoc {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            author true
+            version true
+            links "http://docs.oracle.com/javase/7/docs/api"
+            title "这里写文档标题"
+        }
+    }
+
 
 }
 

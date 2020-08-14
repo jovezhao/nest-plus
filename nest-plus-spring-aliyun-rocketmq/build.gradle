@@ -6,12 +6,19 @@ dependencies {
 
     compile('com.aliyun:aliyun-java-sdk-ons:3.1.5')
 
-    compile('org.projectlombok:lombok:1.18.8')
+    //compile('org.projectlombok:lombok:1.18.8')
 
     compile('org.springframework.boot:spring-boot-starter')
 
     compile('org.springframework.boot:spring-boot-configuration-processor')
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }

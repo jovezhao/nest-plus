@@ -13,6 +13,9 @@ import com.aliyuncs.ons.model.v20190214.OnsTopicListResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.configuration.EventConfiguration;
+import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -93,54 +96,73 @@ public class AliYunRocketMQAutoConfiguration {
     @Bean
     public AliYunRocketMQMessageChannel aliYunRocketMQMessageChannel(Producer producer,
                                                                      Consumer consumer,
-                                                                     NestApplication nestApplication,
-                                                                     IAcsClient iAcsClient) throws ClientException {
+                                                                     NestApplication nestApplication)  {
         AliYunRocketMQProducer aliYunRocketMQProducer = new AliYunRocketMQProducer(producer,nestApplication.getBeanFinder());
         AliYunRocketMQConsumer aliYunRocketMQConsumer=new AliYunRocketMQConsumer(nestApplication.getBeanFinder(),consumer);
-
-
-        Set<EventConfiguration> eventConfigurations = nestApplication.getBeanFinder().getInstances(EventConfiguration.class);
-        if(!ObjectUtils.isEmpty(eventConfigurations)){
-
-            /**
-             * 获取使用阿里云TOPIC通道的事件
-             */
-            Set<EventConfiguration> aliyunTopicChannel = eventConfigurations.stream().filter(n -> n.getMessageChannelCode().equals(AliYunRocketMQMessageChannel.CHANNEL_CODE)).collect(Collectors.toSet());
-            if(!ObjectUtils.isEmpty(aliyunTopicChannel)){
-                //查询阿里云ROCKET_MQ TOPIC列表
-                OnsTopicListRequest topicListRequest=new OnsTopicListRequest();
-                topicListRequest.setInstanceId(instanceId);
-                topicListRequest.setRegionId(regionId);
-                OnsTopicListResponse acsResponse = iAcsClient.getAcsResponse(topicListRequest);
-                Map<String, OnsTopicListResponse.PublishInfoDo> topicListMap=new HashMap<>();
-                if(!ObjectUtils.isEmpty(acsResponse.getData())){
-                    topicListMap= acsResponse.getData().stream().collect(Collectors.toMap(OnsTopicListResponse.PublishInfoDo::getTopic, Function.identity(), (k1, k2) -> k1));
-                }
-                Map<String, OnsTopicListResponse.PublishInfoDo> topicMap=topicListMap;
-
-                aliyunTopicChannel.stream().forEach(n->{
-
-                    //查阅TOPIC是否存在，如果不存在，则创建一个TOPIC
-                    OnsTopicListResponse.PublishInfoDo publishInfoDo = topicMap.get(n.getEventCode());
-                    if(ObjectUtils.isEmpty(publishInfoDo)){
-                        //创建一个TOPIC
-                        OnsTopicCreateRequest createRequest=new OnsTopicCreateRequest();
-                        createRequest.setTopic(n.getEventCode());
-                        createRequest.setInstanceId(instanceId);
-                        createRequest.setRemark("自动创建TOPIC:"+n.getEventCode());
-                        createRequest.setMessageType(2);
-                        try {
-                           iAcsClient.getAcsResponse(createRequest);
-                        } catch (ClientException e) {
-                            log.error("创建阿里云ROCKETMQ的TOPIC:{}失败,原因为:{}",n.getEventCode(),e.getMessage());
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }
         return new AliYunRocketMQMessageChannel(aliYunRocketMQProducer,aliYunRocketMQConsumer,nestApplication);
     }
 
+
+    @Bean(name = "AliYunRocketMqTopicAutoCreateListener")
+    public ApplicationListener aliYunRocketMqTopicAutoCreateListener(BeanFinder beanFinder, IAcsClient iAcsClient) throws ClientException {
+        ApplicationListener applicationListener=new ApplicationListener(){
+            @Override
+            public void applicationStarted(ApplicationEvent applicationEvent) {
+                Set<EventConfiguration> eventConfigurations = beanFinder.getInstances(EventConfiguration.class);
+                if(!ObjectUtils.isEmpty(eventConfigurations)){
+                    /**
+                     * 获取使用阿里云TOPIC通道的事件
+                     */
+                    log.info("开始扫描订阅了阿里云RocketMQ通道的事件配置");
+                    Set<EventConfiguration> aliyunTopicChannel = eventConfigurations.stream().filter(n -> n.getMessageChannelCode().equals(AliYunRocketMQMessageChannel.CHANNEL_CODE)).collect(Collectors.toSet());
+                    if(!ObjectUtils.isEmpty(aliyunTopicChannel)){
+                        //查询阿里云ROCKET_MQ TOPIC列表
+                        OnsTopicListRequest topicListRequest=new OnsTopicListRequest();
+                        topicListRequest.setInstanceId(instanceId);
+                        topicListRequest.setRegionId(regionId);
+                        OnsTopicListResponse acsResponse = null;
+                        try {
+                            acsResponse = iAcsClient.getAcsResponse(topicListRequest);
+                            Map<String, OnsTopicListResponse.PublishInfoDo> topicListMap=new HashMap<>();
+                            if(!ObjectUtils.isEmpty(acsResponse.getData())){
+                                topicListMap= acsResponse.getData().stream().collect(Collectors.toMap(OnsTopicListResponse.PublishInfoDo::getTopic, Function.identity(), (k1, k2) -> k1));
+                            }
+                            Map<String, OnsTopicListResponse.PublishInfoDo> topicMap=topicListMap;
+                            aliyunTopicChannel.stream().forEach(n->{
+                                //查阅TOPIC是否存在，如果不存在，则创建一个TOPIC
+                                OnsTopicListResponse.PublishInfoDo publishInfoDo = topicMap.get(n.getEventCode());
+                                if(ObjectUtils.isEmpty(publishInfoDo)){
+
+                                    //创建一个TOPIC
+                                    OnsTopicCreateRequest createRequest=new OnsTopicCreateRequest();
+                                    createRequest.setTopic(n.getEventCode());
+                                    createRequest.setInstanceId(instanceId);
+                                    createRequest.setRemark("自动创建TOPIC:"+n.getEventCode());
+                                    createRequest.setMessageType(2);
+                                    log.info("开始创建TOPIC:{}",n.getEventCode());
+                                    try {
+                                        iAcsClient.getAcsResponse(createRequest);
+                                    } catch (ClientException e) {
+                                        log.error("创建阿里云ROCKETMQ的TOPIC:{}失败,原因为:{}",n.getEventCode(),e.getMessage());
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (ClientException e) {
+                            log.error("获取阿里云RocketMq Topic列表出现异常,异常信息为:",e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void applicationClosed(ApplicationEvent applicationEvent) {
+
+            }
+        };
+        return applicationListener;
+    }
 
 }

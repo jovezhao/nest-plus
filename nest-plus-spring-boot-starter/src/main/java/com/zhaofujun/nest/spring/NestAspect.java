@@ -18,19 +18,19 @@ import java.lang.reflect.Modifier;
 public class NestAspect {
 
     @Autowired
-    private BeanFinder beanFinder;
+    private NestApplication nestApplication;
+    @Autowired
+    private UnitOfWorkCommit unitOfWorkCommit;
 
     @Around("execution(public * *(..)) && @within(com.zhaofujun.nest.spring.AppService)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        NestApplication application = beanFinder.getInstance(NestApplication.class);
-
-        ServiceContext serviceContext = application.newInstance(joinPoint.getSignature().getDeclaringType());
+        ServiceContext serviceContext = nestApplication.newInstance(joinPoint.getSignature().getDeclaringType());
 
         Object result = invoke(joinPoint);
 
 
-        commit(serviceContext.getContextUnitOfWork());
+        unitOfWorkCommit.commit(serviceContext.getContextUnitOfWork());
 
         return result;
 
@@ -63,8 +63,5 @@ public class NestAspect {
     }
 
 
-    @Transactional
-    public void commit(ContextUnitOfWork unitOfWork) {
-        unitOfWork.commit();
-    }
 }
+

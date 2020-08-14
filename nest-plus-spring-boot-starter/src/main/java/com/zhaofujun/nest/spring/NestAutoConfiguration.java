@@ -5,6 +5,7 @@ import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.json.JsonCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,10 @@ public class NestAutoConfiguration {
 //        return new NestAspect();
 //    }
 
+    @Bean
+    public JsonCreator getJsonCreator(BeanFinder beanFinder){
+        return new JsonCreator(beanFinder);
+    }
     @Bean
     public NestApplication getNestApplication(ContainerProvider containerProvider) {
         return new NestApplication(containerProvider);

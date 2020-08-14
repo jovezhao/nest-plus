@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.spring.test.models;
 
-import com.zhaofujun.nest.core.EventData;
+
+import com.zhaofujun.nest.standard.EventData;
 
 public class PasswordChangedEventData extends EventData {
 

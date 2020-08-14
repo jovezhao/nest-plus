@@ -2,4 +2,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-tx")
     compile 'org.aspectj:aspectjtools'
+//    testCompile("org.springframework.boot:spring-boot-starter-web")
+    testCompile("com.alibaba:fastjson:1.2.73")
 }

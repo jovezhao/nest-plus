@@ -12,10 +12,13 @@ buildscript {
 
 ext{
     nestVersion="2.0.24"
+<<<<<<< HEAD
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+=======
+>>>>>>> 08d9f193556e7621cc178c32d02932cc709dc1da
 }
 
 allprojects {
@@ -65,7 +68,7 @@ subprojects {
     dependencyManagement {
         dependencies {
             dependency("com.zhaofujun.nest:nest-ddd:${nestVersion}")
-            dependency("com.zhaofujun.automapper:automapper:1.3.1")
+            dependency("com.zhaofujun.automapper:automapper:1.3.3")
             dependency("org.aspectj:aspectjtools:1.9.3")
         }
 

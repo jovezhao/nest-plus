@@ -72,18 +72,8 @@ subprojects {
     }
     jar.enabled=true
 
-    //apply from: "${rootProject.projectDir}/publish.gradle"
-    uploadArchives {
-        repositories.mavenDeployer {
-            snapshotRepository(url: "http://192.168.2.251:8081/repository/maven-snapshots/") {//快照
-                authentication(userName: "admin", password: "uplooking@123")
-            }
-            repository(url: "http://192.168.2.251:8081/repository/maven-releases/") {//RELEASE
-                authentication(userName: "admin", password: "uplooking@123")
-            }
+    apply from: "${rootProject.projectDir}/publish.gradle"
 
-        }
-    }
 }
 
 

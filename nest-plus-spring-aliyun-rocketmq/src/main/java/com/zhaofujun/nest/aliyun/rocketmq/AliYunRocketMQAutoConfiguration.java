@@ -49,10 +49,8 @@ public class AliYunRocketMQAutoConfiguration {
     @Value("${aliyun.rocketmq.regionId}")
     private String regionId;
 
-
-
     @Bean
-    public Producer createProducer(){
+    public Properties properties(){
         Properties properties = new Properties();
         // AccessKeyId 阿里云身份验证，在阿里云用户信息管理控制台获取。
         properties.put(PropertyKeyConst.AccessKey,accessKey);
@@ -64,11 +62,18 @@ public class AliYunRocketMQAutoConfiguration {
         properties.put(PropertyKeyConst.NAMESRV_ADDR, namesrvAddr);
 
         properties.put(PropertyKeyConst.GROUP_ID,groupId);
+
+        return properties;
+    }
+
+
+    @Bean
+    public Producer createProducer(Properties properties){
         Producer producer = ONSFactory.createProducer(properties);
         return producer;
     }
 
-    @Bean
+  /*  @Bean
     public Consumer createConsumer(){
         Properties properties = new Properties();
         // AccessKeyId 阿里云身份验证，在阿里云用户信息管理控制台获取。
@@ -82,8 +87,7 @@ public class AliYunRocketMQAutoConfiguration {
         properties.put(PropertyKeyConst.GROUP_ID,groupId);
         Consumer consumer = ONSFactory.createConsumer(properties);
         return consumer;
-
-    }
+    }*/
 
     @Bean
     public IAcsClient createIAcsClient(){
@@ -95,10 +99,10 @@ public class AliYunRocketMQAutoConfiguration {
 
     @Bean
     public AliYunRocketMQMessageChannel aliYunRocketMQMessageChannel(Producer producer,
-                                                                     Consumer consumer,
+                                                                     Properties properties,
                                                                      NestApplication nestApplication)  {
         AliYunRocketMQProducer aliYunRocketMQProducer = new AliYunRocketMQProducer(producer,nestApplication.getBeanFinder());
-        AliYunRocketMQConsumer aliYunRocketMQConsumer=new AliYunRocketMQConsumer(nestApplication.getBeanFinder(),consumer);
+        AliYunRocketMQConsumer aliYunRocketMQConsumer=new AliYunRocketMQConsumer(nestApplication.getBeanFinder(),properties);
         return new AliYunRocketMQMessageChannel(aliYunRocketMQProducer,aliYunRocketMQConsumer,nestApplication);
     }
 

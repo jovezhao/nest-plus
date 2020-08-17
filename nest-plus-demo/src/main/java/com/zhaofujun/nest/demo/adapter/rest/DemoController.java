@@ -3,7 +3,6 @@ package com.zhaofujun.nest.demo.adapter.rest;
 import com.zhaofujun.nest.demo.application.TeacherAppService;
 import com.zhaofujun.nest.demo.contract.OrderService;
 import com.zhaofujun.nest.demo.contract.UserService;
-import com.zhaofujun.nest.spring.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

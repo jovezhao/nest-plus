@@ -103,7 +103,8 @@ public class AliYunRocketMQAutoConfiguration {
     }
 
 
-    @Bean(name = "AliYunRocketMqTopicAutoCreateListener")
+/*    @Bean(name = "AliYunRocketMqTopicAutoCreateListener")*/
+    @Bean
     public ApplicationListener aliYunRocketMqTopicAutoCreateListener(BeanFinder beanFinder, IAcsClient iAcsClient) throws ClientException {
         ApplicationListener applicationListener=new ApplicationListener(){
             @Override

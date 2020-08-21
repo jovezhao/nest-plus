@@ -1,0 +1,4 @@
+POST {{base}}/user/create
+
+###
+POST {{base}}/user/update

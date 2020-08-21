@@ -1,12 +1,11 @@
 package com.zhaofujun.nest.activemq;
 
-import com.zhaofujun.nest.CustomException;
-import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.standard.CustomException;
+import com.zhaofujun.nest.standard.EventHandler;
+import com.zhaofujun.nest.standard.SystemException;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +22,7 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
     private volatile boolean running = false;
 
-    public ActiveMQMessageConsumer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
-        super(beanFinder);
+    public ActiveMQMessageConsumer(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 

@@ -2,7 +2,6 @@ package com.zhaofujun.nest.activemq;
 
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
-import com.zhaofujun.nest.core.BeanFinder;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -13,8 +12,7 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
 
     private JmsTemplate jmsTemplate;
 
-    public ActiveMQMessageProducer(JmsTemplate jmsTemplate, BeanFinder beanFinder) {
-        super(beanFinder);
+    public ActiveMQMessageProducer(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 

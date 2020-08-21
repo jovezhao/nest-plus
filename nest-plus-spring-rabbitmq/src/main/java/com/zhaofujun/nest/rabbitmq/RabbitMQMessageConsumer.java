@@ -1,9 +1,8 @@
 package com.zhaofujun.nest.rabbitmq;
 
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
+import com.zhaofujun.nest.standard.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -19,8 +18,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer implement
     private DefaultMessageListenerContainer defaultMessageListenerContainer;
 
 
-    public RabbitMQMessageConsumer(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpAdmin amqpAdmin, BeanFinder beanFinder) {
-        super(beanFinder);
+    public RabbitMQMessageConsumer(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpAdmin amqpAdmin) {
         this.amqpAdmin = amqpAdmin;
         this.defaultMessageListenerContainer = defaultMessageListenerContainer;
         this.defaultMessageListenerContainer.setMessageConverter(getMessageConverter());

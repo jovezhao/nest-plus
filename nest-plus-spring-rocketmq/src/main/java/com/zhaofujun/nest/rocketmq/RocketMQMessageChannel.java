@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.rocketmq;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
@@ -15,15 +14,13 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
 
     public static final String CHANNEL_CODE = "RocketMQMessageChannel";
 
-    private ContainerProvider containerProvider;
     private RocketMQTemplate rocketMQTemplate;
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
     private RocketMQProperties rocketMQProperties;
     private NestApplication nestApplication;
 
-    public RocketMQMessageChannel(ContainerProvider containerProvider, RocketMQProperties rocketMQProperties,RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
-        this.containerProvider = containerProvider;
+    public RocketMQMessageChannel( RocketMQProperties rocketMQProperties,RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
         this.rocketMQTemplate = rocketMQTemplate;
         this.nestApplication = nestApplication;
         this.rocketMQProperties=rocketMQProperties;
@@ -42,14 +39,14 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     }
 
     @Override
-    public String getMessageChannelCode() {
+    public String getCode() {
         return CHANNEL_CODE;
     }
 
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new RocketMQMessageProducer(rocketMQTemplate,containerProvider);
+            messageProducer = new RocketMQMessageProducer(rocketMQTemplate);
         return messageProducer;
     }
 
@@ -57,7 +54,7 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if (messageConsumer == null)
-            messageConsumer = new RocketMQMessageConsumer(rocketMQProperties, this.containerProvider);
+            messageConsumer = new RocketMQMessageConsumer(rocketMQProperties);
         return messageConsumer;
     }
 

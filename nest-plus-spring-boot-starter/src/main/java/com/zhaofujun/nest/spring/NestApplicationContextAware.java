@@ -1,9 +1,12 @@
 package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.cache.CacheConfiguration;
+import com.zhaofujun.nest.context.event.EventConfiguration;
+import com.zhaofujun.nest.spring.configuration.MessageProperties;
+import com.zhaofujun.nest.spring.configuration.NestProperties;
+import com.zhaofujun.nest.utils.StringUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -13,18 +16,43 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NestApplicationContextAware implements ApplicationContextAware {
-    @Autowired
-    private EventBus eventBus;
 
-    @Autowired
-    private NestApplication nestApplication;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        nestApplication.start();
+        NestApplication nestApplication = NestApplication.current();
+        MessageProperties messageProperties = applicationContext.getBean(MessageProperties.class);
+        //使用properties配置NestApplication
+        if (messageProperties != null) {
+            if (!StringUtils.isEmpty(messageProperties.getConverter()))
+                nestApplication.getMessageConfiguration().setConverter(messageProperties.getConverter());
+            if (!StringUtils.isEmpty(messageProperties.getResendStore()))
+                nestApplication.getMessageConfiguration().setResendStore(messageProperties.getResendStore());
+            if (!StringUtils.isEmpty(messageProperties.getStore()))
+                nestApplication.getMessageConfiguration().setStore(messageProperties.getStore());
+        }
+        NestProperties nestProperties = applicationContext.getBean(NestProperties.class);
+        if (nestApplication != null) {
+            nestProperties.getCaches().forEach((p, q) -> {
+                CacheConfiguration cacheConfiguration = new CacheConfiguration();
+                cacheConfiguration.setCode(p);
+                cacheConfiguration.setName(StringUtils.isEmpty(q.getName()) ? p : q.getName());
+                cacheConfiguration.setIdleSeconds(q.getIdleSeconds());
+                cacheConfiguration.setProviderCode(q.getProvider());
 
-        eventBus.autoRegister();
+                nestApplication.getConfigurationManager().addConfigurationItem(cacheConfiguration);
+            });
+            nestProperties.getEvents().forEach((p, q) -> {
+                EventConfiguration eventConfiguration = new EventConfiguration();
+                eventConfiguration.setCode(p);
+                eventConfiguration.setMessageChannelCode(q);
 
+                nestApplication.getConfigurationManager().addConfigurationItem(eventConfiguration);
+            });
+        }
+
+
+        nestApplication.setContainerProvider(new SpringBeanContainerProvider(applicationContext));
 
         ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;
         configurableApplicationContext.addApplicationListener(new ApplicationListener<ContextClosedEvent>() {
@@ -33,5 +61,8 @@ public class NestApplicationContextAware implements ApplicationContextAware {
                 nestApplication.close();
             }
         });
+
+        nestApplication.start();
+
     }
 }

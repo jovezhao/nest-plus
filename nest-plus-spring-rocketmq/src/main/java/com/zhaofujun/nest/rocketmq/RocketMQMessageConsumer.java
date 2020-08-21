@@ -1,12 +1,10 @@
 package com.zhaofujun.nest.rocketmq;
 
-import com.zhaofujun.nest.CustomException;
-import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventHandler;
-import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
+import com.zhaofujun.nest.standard.CustomException;
+import com.zhaofujun.nest.standard.EventHandler;
+import com.zhaofujun.nest.standard.SystemException;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -28,8 +26,7 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
     private RocketMQProperties rocketMQProperties;
     private List<DefaultMQPushConsumer> consumers = new ArrayList<>();
 
-    public RocketMQMessageConsumer(RocketMQProperties rocketMQProperties, BeanFinder beanFinder) {
-        super(beanFinder);
+    public RocketMQMessageConsumer(RocketMQProperties rocketMQProperties) {
         this.rocketMQProperties = rocketMQProperties;
     }
 

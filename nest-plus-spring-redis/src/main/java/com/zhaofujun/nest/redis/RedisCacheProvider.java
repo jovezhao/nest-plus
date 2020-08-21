@@ -1,8 +1,7 @@
 package com.zhaofujun.nest.redis;
 
-import com.zhaofujun.nest.cache.provider.CacheProvider;
-import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.provider.CacheProvider;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.lang.reflect.Type;
@@ -16,9 +15,9 @@ public class RedisCacheProvider implements CacheProvider {
     private StringRedisTemplate redisTemplate;
     private JsonCreator jsonCreator;
 
-    public RedisCacheProvider(StringRedisTemplate redisTemplate,BeanFinder beanFinder) {
+    public RedisCacheProvider(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
-        this.jsonCreator=new JsonCreator(beanFinder);
+        this.jsonCreator=new JsonCreator();
     }
 
     @Override

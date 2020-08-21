@@ -1,11 +1,12 @@
 dependencies {
+//    implementation 'org.jetbrains:annotations:19.0.0'
     compile project(":nest-plus-spring-boot-starter")
     compile project(":nest-plus-spring-automapper")
 //    compile project(":nest-plus-spring-activemq")
-    compile project(":nest-plus-spring-rabbitmq")
+//    compile project(":nest-plus-spring-rabbitmq")
 //    compile project(":nest-plus-spring-rocketmq")
-    compile project(":nest-plus-spring-redis")
+//    compile project(":nest-plus-spring-redis")
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("com.baomidou:mybatis-plus-boot-starter:3.3.0")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.postgresql:postgresql")
 }

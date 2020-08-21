@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.activemq;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
@@ -14,14 +13,12 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
 
     public static final String CHANNEL_CODE = "ActiveMQMessageChannel";
 
-    private ContainerProvider containerProvider;
     private JmsTemplate jmsTemplate;
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
     private NestApplication nestApplication;
 
-    public ActiveMQMessageChannel(ContainerProvider containerProvider, JmsTemplate jmsTemplate, NestApplication nestApplication) {
-        this.containerProvider = containerProvider;
+    public ActiveMQMessageChannel( JmsTemplate jmsTemplate, NestApplication nestApplication) {
         this.jmsTemplate = jmsTemplate;
         this.nestApplication = nestApplication;
 
@@ -39,14 +36,14 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     }
 
     @Override
-    public String getMessageChannelCode() {
+    public String getCode() {
         return CHANNEL_CODE;
     }
 
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if (messageProducer == null)
-            messageProducer = new ActiveMQMessageProducer(jmsTemplate,containerProvider);
+            messageProducer = new ActiveMQMessageProducer(jmsTemplate);
         return messageProducer;
     }
 
@@ -54,7 +51,7 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if (messageConsumer == null)
-            messageConsumer = new ActiveMQMessageConsumer(jmsTemplate, this.containerProvider);
+            messageConsumer = new ActiveMQMessageConsumer(jmsTemplate);
         return messageConsumer;
     }
 

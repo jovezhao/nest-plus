@@ -2,39 +2,27 @@ package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.standard.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan
+@Import(ApplicationServiceScannerRegistrar.class)
 public class NestAutoConfiguration {
-//    @Bean
-//    public SpringBeanContainerProvider getSpringBeanContainerProvider() {
-//        return new SpringBeanContainerProvider();
-//    }
-//
-//    @Bean
-//    public NestAspect getNestAspect() {
-//        return new NestAspect();
-//    }
 
     @Bean
-    public JsonCreator getJsonCreator(BeanFinder beanFinder){
-        return new JsonCreator(beanFinder);
-    }
-    @Bean
-    public NestApplication getNestApplication(ContainerProvider containerProvider) {
-        return new NestApplication(containerProvider);
+    public JsonCreator getJsonCreator() {
+        return new JsonCreator();
     }
 
     @Bean
-    public EventBus getEventBus(BeanFinder beanFinder) {
-        return new DefaultEventBus(beanFinder);
+    public EventBus getEventBus() {
+        return new DefaultEventBus(NestApplication.current());
     }
+
 }
 

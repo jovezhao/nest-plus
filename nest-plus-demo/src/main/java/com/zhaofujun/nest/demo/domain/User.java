@@ -1,33 +1,26 @@
 package com.zhaofujun.nest.demo.domain;
 
-import com.zhaofujun.nest.context.model.StringIdentifier;
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.LongIdentifier;
 
-public abstract class User extends BaseEntity<StringIdentifier> {
+public abstract class User extends BaseEntity<LongIdentifier> {
     private String name;
-    private int age;
+    private String tel;
+
+    public void init(String name, String tel) {
+        this.name = name;
+        this.tel = tel;
+    }
 
     public String getName() {
         return name;
     }
 
-    public int getAge() {
-        return age;
+    public String getTel() {
+        return tel;
     }
 
-    public void init(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public void changeAge(int age) {
-        this.age = age;
-    }
-
-    @Override
-    public void verify() {
-        if (age != 0 && age < 10) {
-            throw new EntityVerifyException("年龄太小了");
-        }
+    public void changeTel(String tel){
+        this.tel=tel;
     }
 }

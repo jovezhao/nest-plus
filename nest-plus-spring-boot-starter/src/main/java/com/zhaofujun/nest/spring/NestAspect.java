@@ -1,67 +1,53 @@
 package com.zhaofujun.nest.spring;
 
-import com.zhaofujun.nest.*;
-import com.zhaofujun.nest.context.ContextUnitOfWork;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.context.ServiceContext;
+import com.zhaofujun.nest.context.appservice.ApplicationServiceIntercept;
+import com.zhaofujun.nest.context.appservice.MethodInvoker;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.lang.reflect.Modifier;
 
 @Component
 @Aspect
 public class NestAspect {
 
     @Autowired
-    private NestApplication nestApplication;
-    @Autowired
-    private UnitOfWorkCommit unitOfWorkCommit;
+    private SpringUnitOfWorkCommitor commitor;
 
-    @Around("execution(public * *(..)) && @within(com.zhaofujun.nest.spring.AppService)")
+    @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.standard.AppService)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        ServiceContext serviceContext = nestApplication.newInstance(joinPoint.getSignature().getDeclaringType());
-
-        Object result = invoke(joinPoint);
-
-
-        unitOfWorkCommit.commit(serviceContext.getContextUnitOfWork());
-
-        return result;
-
+        MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
+        ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, commitor);
+        return intercept.doInvoke();
     }
 
-    private Object invoke(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object result = null;
-        try {
-            result = joinPoint.proceed();
-        } catch (CustomException ex) {
-            //业务处理异常，
-            throw ex;
-        } catch (SystemException ex) {
-            //系统异常
-            throw ex;
-        } catch (Throwable ex) {
-            //其它异常以系统异常抛出
-            if (ex instanceof CustomExceptionable) {
-                //业务处理异常
-                throw ex;
-            } else if (ex instanceof SystemExceptionable) {
-                //系统处理异常
-                throw new SystemException("系统异常", ex);
 
-            } else {
-                throw new SystemException("系统异常", ex);
-            }
+    class AspectMethodInvoker implements MethodInvoker {
+        private ProceedingJoinPoint joinPoint;
+
+        public AspectMethodInvoker(ProceedingJoinPoint joinPoint) {
+            this.joinPoint = joinPoint;
         }
-        return result;
+
+        @Override
+        public String getMethodName() {
+            return joinPoint.getSignature().getName();
+        }
+
+        @Override
+        public Object invoke() throws Throwable {
+            return joinPoint.proceed();
+        }
+
+        @Override
+        public Class getTargetClass() {
+            return joinPoint.getTarget().getClass();
+        }
+
+        @Override
+        public Object getTarget() {
+            return joinPoint.getTarget();
+        }
     }
-
-
 }
-

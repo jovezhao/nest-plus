@@ -6,7 +6,6 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -27,16 +26,22 @@ public class AliYunRocketMQConsumer extends DistributeMessageConsumer {
     public AliYunRocketMQConsumer(BeanFinder beanFinder, Properties properties) {
         super(beanFinder);
         this.properties=properties;
+
     }
 
     @Override
     public void stop() {
-
+        consumers.forEach(p -> p.shutdown());
     }
 
     @Override
     public void subscribe(EventHandler eventHandler) {
 
+        StringBuilder groupId = new StringBuilder("GID_").append(eventHandler.getClass().getSimpleName()).append("_").append(eventHandler.getEventCode());
+
+        Properties properties=new Properties();
+        properties.putAll(this.properties);
+        properties.put(PropertyKeyConst.GROUP_ID,groupId.toString());
         Consumer consumer = ONSFactory.createConsumer(properties);
 
         consumer.subscribe(eventHandler.getEventCode(), "*", new MessageListener() {
@@ -57,4 +62,6 @@ public class AliYunRocketMQConsumer extends DistributeMessageConsumer {
         consumer.start();
         this.consumers.add(consumer);
     }
+
+
 }

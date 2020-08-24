@@ -2,6 +2,7 @@ package com.zhaofujun.nest.rabbitmq;
 
 import com.rabbitmq.client.Channel;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.standard.CustomException;
 import com.zhaofujun.nest.standard.EventHandler;
@@ -17,7 +18,6 @@ import java.util.List;
 
 public class DefaultMessageListenerContainer extends DirectMessageListenerContainer {
     private List<QueueAndHandler> eventHandlers = new ArrayList<>();
-    private MessageConverter messageConverter;
     private ReceivedMessageHandler receivedMessageHandler;
 
 
@@ -26,6 +26,9 @@ public class DefaultMessageListenerContainer extends DirectMessageListenerContai
         super.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         super.setMessageListener(new ChannelAwareMessageListener() {
 
+            private MessageConverter getMessageConverter(){
+                return MessageConverterFactory.create();
+            }
             @Override
             public void onMessage(Message message, Channel channel) throws Exception {
                 String queue = message.getMessageProperties().getConsumerQueue();
@@ -34,7 +37,7 @@ public class DefaultMessageListenerContainer extends DirectMessageListenerContai
                 MessageInfo messageInfo = null;
 
                 try {
-                    messageInfo = messageConverter.jsonToMessage(messageText, eventHandler.getEventDataClass());
+                    messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
                 } catch (Exception ex) {
                     logger.warn("反序列化失败，消息体：" + messageText, ex);
                     //消息格式不正确，消息做成功消费处理
@@ -53,10 +56,6 @@ public class DefaultMessageListenerContainer extends DirectMessageListenerContai
                 }
             }
         });
-    }
-
-    public void setMessageConverter(MessageConverter messageConverter) {
-        this.messageConverter = messageConverter;
     }
 
     public void setReceivedMessageHandler(ReceivedMessageHandler receivedMessageHandler) {

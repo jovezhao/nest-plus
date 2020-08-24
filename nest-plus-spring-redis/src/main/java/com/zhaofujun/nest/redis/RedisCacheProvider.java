@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.redis;
 
+import com.zhaofujun.nest.cache.CacheProvider;
 import com.zhaofujun.nest.json.JsonCreator;
-import com.zhaofujun.nest.provider.CacheProvider;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.lang.reflect.Type;

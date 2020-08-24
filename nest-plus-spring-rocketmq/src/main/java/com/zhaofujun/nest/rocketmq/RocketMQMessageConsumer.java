@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.rocketmq;
 
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
+import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.standard.CustomException;
 import com.zhaofujun.nest.standard.EventHandler;
@@ -41,6 +43,9 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
             mqPushConsumer.setMessageModel(MessageModel.CLUSTERING);
             mqPushConsumer.subscribe(eventHandler.getEventCode(), "");
             mqPushConsumer.registerMessageListener(new MessageListenerConcurrently() {
+                private MessageConverter getMessageConverter(){
+                    return MessageConverterFactory.create();
+                }
                 @Override
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
 

@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.rabbitmq;
 
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
+import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -37,5 +39,9 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
 //            e.printStackTrace();
 //            throw new SystemException("发送RabbitMQ消息失败", e);
 //        }
+    }
+
+    private MessageConverter getMessageConverter() {
+        return MessageConverterFactory.create();
     }
 }

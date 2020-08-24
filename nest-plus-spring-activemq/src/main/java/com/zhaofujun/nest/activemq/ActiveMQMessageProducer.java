@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.activemq;
 
+import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 import org.apache.activemq.command.ActiveMQTopic;
@@ -27,6 +29,10 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
             }
         });
 
+    }
+
+    private MessageConverter getMessageConverter() {
+        return MessageConverterFactory.create();
     }
 
 

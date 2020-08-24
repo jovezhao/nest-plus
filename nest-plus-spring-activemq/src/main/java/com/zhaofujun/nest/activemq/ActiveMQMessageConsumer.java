@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.activemq;
 
+import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.json.JsonCreator;
@@ -71,6 +73,10 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                 }
             }
         }
+    }
+
+    private MessageConverter getMessageConverter() {
+        return MessageConverterFactory.create();
     }
 
     @Override

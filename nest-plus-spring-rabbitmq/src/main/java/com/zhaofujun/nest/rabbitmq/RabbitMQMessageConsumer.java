@@ -21,7 +21,6 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer implement
     public RabbitMQMessageConsumer(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpAdmin amqpAdmin) {
         this.amqpAdmin = amqpAdmin;
         this.defaultMessageListenerContainer = defaultMessageListenerContainer;
-        this.defaultMessageListenerContainer.setMessageConverter(getMessageConverter());
         this.defaultMessageListenerContainer.setReceivedMessageHandler(this);
     }
 

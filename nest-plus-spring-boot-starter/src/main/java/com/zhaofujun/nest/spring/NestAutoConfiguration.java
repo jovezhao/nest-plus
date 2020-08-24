@@ -21,7 +21,7 @@ public class NestAutoConfiguration {
 
     @Bean
     public EventBus getEventBus() {
-        return new DefaultEventBus(NestApplication.current());
+        return new DefaultEventBus();
     }
 
 }

@@ -25,7 +25,7 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
         this.nestApplication = nestApplication;
         this.rocketMQProperties=rocketMQProperties;
 
-        this.nestApplication.addApplicationListener(new ApplicationListener() {
+        this.nestApplication.getListenerManager().addListeners(new ApplicationListener() {
             @Override
             public void applicationStarted(ApplicationEvent applicationEvent) {
                 //应用启动

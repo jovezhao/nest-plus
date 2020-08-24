@@ -29,7 +29,7 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
         this.amqpAdmin = amqpAdmin;
         this.nestApplication = nestApplication;
 
-        this.nestApplication.addApplicationListener(new ApplicationListener() {
+        this.nestApplication.getListenerManager().addListeners(new ApplicationListener() {
             @Override
             public void applicationStarted(ApplicationEvent applicationEvent) {
                 //应用启动

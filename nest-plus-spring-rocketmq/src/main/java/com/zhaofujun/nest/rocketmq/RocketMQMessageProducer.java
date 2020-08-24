@@ -18,7 +18,6 @@ public class RocketMQMessageProducer extends DistributeMessageProducer {
     public void commit(String messageGroup, MessageInfo messageInfo) {
         String json = getMessageConverter().messageToString(messageInfo);
         rocketMQTemplate.convertAndSend(messageGroup, json);
-
     }
 
     private MessageConverter getMessageConverter() {

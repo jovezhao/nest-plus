@@ -1,11 +1,13 @@
 package com.zhaofujun.nest.demo.domain;
 
 import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.BaseValueObject;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 
 public abstract class User extends BaseEntity<LongIdentifier> {
     private String name;
     private String tel;
+    private Address address;
 
     public void init(String name, String tel) {
         this.name = name;
@@ -23,4 +25,10 @@ public abstract class User extends BaseEntity<LongIdentifier> {
     public void changeTel(String tel){
         this.tel=tel;
     }
+
+    public void cacheAddress(Address address){
+        this.address=address;
+    }
+
 }
+

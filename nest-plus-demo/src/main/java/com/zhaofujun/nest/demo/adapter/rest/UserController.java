@@ -21,10 +21,6 @@ public class UserController {
 
     @PostMapping("/update")
     public UserDto udpate() {
-        UserDto userDto = null;
-        for (int i = 0; i < 1000; i++) {
-            userDto = userAppService.changeTel("tel" + i);
-        }
-        return userDto;
+        return userAppService.changeAddress();
     }
 }

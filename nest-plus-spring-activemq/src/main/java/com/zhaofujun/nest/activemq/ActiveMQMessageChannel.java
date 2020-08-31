@@ -16,23 +16,9 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     private JmsTemplate jmsTemplate;
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
-    private NestApplication nestApplication;
 
-    public ActiveMQMessageChannel( JmsTemplate jmsTemplate, NestApplication nestApplication) {
+    public ActiveMQMessageChannel( JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
-        this.nestApplication = nestApplication;
-
-        this.nestApplication.getListenerManager().addListeners(new ApplicationListener() {
-            @Override
-            public void applicationStarted(ApplicationEvent applicationEvent) {
-                //应用启动
-            }
-
-            @Override
-            public void applicationClosed(ApplicationEvent applicationEvent) {
-                onClose();
-            }
-        });
     }
 
     @Override
@@ -56,12 +42,12 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     }
 
     @Override
-    public void onStart() {
+    public void start() {
 
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         getMessageConsumer().stop();
     }
 

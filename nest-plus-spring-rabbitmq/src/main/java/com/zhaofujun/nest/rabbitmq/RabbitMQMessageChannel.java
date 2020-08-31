@@ -20,26 +20,12 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     private AmqpAdmin amqpAdmin;
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
-    private NestApplication nestApplication;
     private DefaultMessageListenerContainer defaultMessageListenerContainer;
 
-    public RabbitMQMessageChannel(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin, NestApplication nestApplication) {
+    public RabbitMQMessageChannel(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin) {
         this.defaultMessageListenerContainer = defaultMessageListenerContainer;
         this.amqpTemplate = amqpTemplate;
         this.amqpAdmin = amqpAdmin;
-        this.nestApplication = nestApplication;
-
-        this.nestApplication.getListenerManager().addListeners(new ApplicationListener() {
-            @Override
-            public void applicationStarted(ApplicationEvent applicationEvent) {
-                //应用启动
-            }
-
-            @Override
-            public void applicationClosed(ApplicationEvent applicationEvent) {
-                onClose();
-            }
-        });
     }
 
     @Override
@@ -63,12 +49,12 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
     }
 
     @Override
-    public void onStart() {
+    public void start() {
 
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         getMessageConsumer().stop();
     }
 

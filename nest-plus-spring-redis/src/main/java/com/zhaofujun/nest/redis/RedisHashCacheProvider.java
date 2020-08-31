@@ -17,7 +17,7 @@ public class RedisHashCacheProvider implements CacheProvider {
 
     public RedisHashCacheProvider(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
-        this.jsonCreator=new JsonCreator();
+        this.jsonCreator= JsonCreator.getInstance();
     }
 
     @Override

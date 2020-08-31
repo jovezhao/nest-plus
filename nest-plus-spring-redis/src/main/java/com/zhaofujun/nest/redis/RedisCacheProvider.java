@@ -19,7 +19,7 @@ public class RedisCacheProvider implements CacheProvider {
 
     public RedisCacheProvider(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
-        this.jsonCreator = new JsonCreator();
+        this.jsonCreator = JsonCreator.getInstance();
     }
 
     @Override

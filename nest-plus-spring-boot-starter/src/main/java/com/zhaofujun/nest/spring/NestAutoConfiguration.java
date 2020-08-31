@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Import;
 @Import(ApplicationServiceScannerRegistrar.class)
 public class NestAutoConfiguration {
 
-    @Bean
-    public JsonCreator getJsonCreator() {
-        return new JsonCreator();
-    }
+//    @Bean
+//    public JsonCreator getJsonCreator() {
+//        return new JsonCreator();
+//    }
 
     @Bean
     public EventBus getEventBus() {

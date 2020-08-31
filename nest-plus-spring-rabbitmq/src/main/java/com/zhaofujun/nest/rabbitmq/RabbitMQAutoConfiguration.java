@@ -1,6 +1,5 @@
 package com.zhaofujun.nest.rabbitmq;
 
-import com.zhaofujun.nest.NestApplication;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -13,7 +12,7 @@ public class RabbitMQAutoConfiguration {
 
     @Bean
     public RabbitMQMessageChannel rabbitMQMessageChannel(DefaultMessageListenerContainer defaultMessageListenerContainer, AmqpTemplate amqpTemplate, AmqpAdmin amqpAdmin) {
-        return new RabbitMQMessageChannel(defaultMessageListenerContainer, amqpTemplate, amqpAdmin, NestApplication.current());
+        return new RabbitMQMessageChannel(defaultMessageListenerContainer, amqpTemplate, amqpAdmin);
     }
 
 

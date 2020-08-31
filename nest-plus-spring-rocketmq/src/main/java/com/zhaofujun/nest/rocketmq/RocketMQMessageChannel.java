@@ -24,18 +24,6 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
         this.rocketMQTemplate = rocketMQTemplate;
         this.nestApplication = nestApplication;
         this.rocketMQProperties=rocketMQProperties;
-
-        this.nestApplication.getListenerManager().addListeners(new ApplicationListener() {
-            @Override
-            public void applicationStarted(ApplicationEvent applicationEvent) {
-                //应用启动
-            }
-
-            @Override
-            public void applicationClosed(ApplicationEvent applicationEvent) {
-                onClose();
-            }
-        });
     }
 
     @Override
@@ -59,12 +47,12 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     }
 
     @Override
-    public void onStart() {
+    public void start() {
 
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         getMessageConsumer().stop();
     }
 

@@ -1,9 +1,6 @@
 package com.zhaofujun.nest.spring;
 
-import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
-import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.standard.EventBus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

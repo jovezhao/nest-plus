@@ -4,8 +4,6 @@ import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
-import com.zhaofujun.nest.event.ApplicationEvent;
-import com.zhaofujun.nest.event.ApplicationListener;
 import org.apache.rocketmq.spring.autoconfigure.RocketMQProperties;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 
@@ -20,10 +18,10 @@ public class RocketMQMessageChannel extends DistributeMessageChannel {
     private RocketMQProperties rocketMQProperties;
     private NestApplication nestApplication;
 
-    public RocketMQMessageChannel( RocketMQProperties rocketMQProperties,RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
+    public RocketMQMessageChannel(RocketMQProperties rocketMQProperties, RocketMQTemplate rocketMQTemplate, NestApplication nestApplication) {
         this.rocketMQTemplate = rocketMQTemplate;
         this.nestApplication = nestApplication;
-        this.rocketMQProperties=rocketMQProperties;
+        this.rocketMQProperties = rocketMQProperties;
     }
 
     @Override

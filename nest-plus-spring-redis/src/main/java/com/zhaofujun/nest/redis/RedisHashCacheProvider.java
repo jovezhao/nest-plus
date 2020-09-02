@@ -17,7 +17,7 @@ public class RedisHashCacheProvider implements CacheProvider {
 
     public RedisHashCacheProvider(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
-        this.jsonCreator= JsonCreator.getInstance();
+        this.jsonCreator = JsonCreator.getInstance();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RedisHashCacheProvider implements CacheProvider {
         String json = jsonCreator.toJsonString(value);
 
         redisTemplate.opsForHash().put(groupName, key, json);
-        redisTemplate.expire(groupName,idleSeconds, TimeUnit.SECONDS);
+        redisTemplate.expire(groupName, idleSeconds, TimeUnit.SECONDS);
     }
 
     @Override

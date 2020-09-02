@@ -1,11 +1,8 @@
 package com.zhaofujun.nest.rabbitmq;
 
-import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
-import com.zhaofujun.nest.event.ApplicationEvent;
-import com.zhaofujun.nest.event.ApplicationListener;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 

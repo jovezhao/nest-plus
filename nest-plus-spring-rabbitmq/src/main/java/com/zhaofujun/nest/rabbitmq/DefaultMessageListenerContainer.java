@@ -26,9 +26,10 @@ public class DefaultMessageListenerContainer extends DirectMessageListenerContai
         super.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         super.setMessageListener(new ChannelAwareMessageListener() {
 
-            private MessageConverter getMessageConverter(){
+            private MessageConverter getMessageConverter() {
                 return MessageConverterFactory.create();
             }
+
             @Override
             public void onMessage(Message message, Channel channel) throws Exception {
                 String queue = message.getMessageProperties().getConsumerQueue();

@@ -37,7 +37,7 @@ public class RedisCacheProvider implements CacheProvider {
         String redisKey = getRedisKey(groupName, key);
         String json = redisTemplate.opsForValue().get(redisKey);
         if (StringUtils.isEmpty(json)) return null;
-        return jsonCreator.toObj(json, type);
+        return jsonCreator.toObj(json, type, true);
 
     }
 

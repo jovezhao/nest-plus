@@ -22,7 +22,6 @@ public class ApplicationServiceScanner extends ClassPathBeanDefinitionScanner {
     }
 
 
-
     public void setMarkerInterface(Class<?> markerInterface) {
         this.markerInterface = markerInterface;
     }

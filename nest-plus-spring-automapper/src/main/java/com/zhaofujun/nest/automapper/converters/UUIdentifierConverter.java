@@ -3,7 +3,7 @@ package com.zhaofujun.nest.automapper.converters;
 import com.zhaofujun.automapper.converter.Converter;
 import com.zhaofujun.nest.context.model.UUIdentifier;
 
-public class UUIdentifierConverter extends Converter<UUIdentifier,String> {
+public class UUIdentifierConverter extends Converter<UUIdentifier, String> {
     @Override
     public Class<UUIdentifier> getSourceClass() {
         return UUIdentifier.class;

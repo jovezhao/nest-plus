@@ -9,8 +9,8 @@ import org.springframework.jms.core.JmsTemplate;
 public class ActivemqAutoConfiguration {
 
     @Bean
-    public ActiveMQMessageChannel activeMQMessageChannel( JmsTemplate jmsTemplate) {
-        return new ActiveMQMessageChannel( jmsTemplate);
+    public ActiveMQMessageChannel activeMQMessageChannel(JmsTemplate jmsTemplate) {
+        return new ActiveMQMessageChannel(jmsTemplate);
     }
 
 }

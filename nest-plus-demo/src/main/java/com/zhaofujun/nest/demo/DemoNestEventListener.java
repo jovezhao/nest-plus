@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class DemoNestEventListener implements ApplicationListener , ServiceContextListener {
+public class DemoNestEventListener implements ApplicationListener, ServiceContextListener {
     @Override
     public void applicationStarted(ApplicationEvent applicationEvent) {
         System.out.println("applicationStarted");

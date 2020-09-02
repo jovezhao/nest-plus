@@ -1,13 +1,14 @@
 package com.zhaofujun.nest.spring.test;
 
-import com.zhaofujun.nest.event.*;
+import com.zhaofujun.nest.event.ApplicationEvent;
+import com.zhaofujun.nest.event.ApplicationListener;
+import com.zhaofujun.nest.event.ServiceContextListener;
+import com.zhaofujun.nest.event.ServiceEvent;
 import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Method;
 
 
 @Component
-public class TestNestEventListener implements ApplicationListener , ServiceContextListener {
+public class TestNestEventListener implements ApplicationListener, ServiceContextListener {
     @Override
     public void applicationStarted(ApplicationEvent applicationEvent) {
         System.out.println("applicationStarted");

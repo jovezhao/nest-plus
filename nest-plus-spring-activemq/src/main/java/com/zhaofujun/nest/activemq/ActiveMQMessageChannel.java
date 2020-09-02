@@ -1,11 +1,8 @@
 package com.zhaofujun.nest.activemq;
 
-import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
-import com.zhaofujun.nest.event.ApplicationEvent;
-import com.zhaofujun.nest.event.ApplicationListener;
 import org.springframework.jms.core.JmsTemplate;
 
 
@@ -17,7 +14,7 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
     private DistributeMessageProducer messageProducer;
     private DistributeMessageConsumer messageConsumer;
 
-    public ActiveMQMessageChannel( JmsTemplate jmsTemplate) {
+    public ActiveMQMessageChannel(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 

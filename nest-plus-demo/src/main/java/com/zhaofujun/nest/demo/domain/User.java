@@ -22,12 +22,12 @@ public abstract class User extends BaseEntity<LongIdentifier> {
         return tel;
     }
 
-    public void changeTel(String tel){
-        this.tel=tel;
+    public void changeTel(String tel) {
+        this.tel = tel;
     }
 
-    public void cacheAddress(Address address){
-        this.address=address;
+    public void cacheAddress(Address address) {
+        this.address = address;
     }
 
 }

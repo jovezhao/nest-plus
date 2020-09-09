@@ -17,7 +17,7 @@ nest-plus不仅仅集成了spring，还集成了activemq、rocketmq、rabbitmq�
 <dependency>
   <groupId>com.zhaofujun.nest</groupId>
   <artifactId>nest-plus-spring-boot-starter</artifactId>
-  <version>2.0.8</version>
+  <version>2.1.11</version>
 </dependency>
 ```
 *使用Gradle方式添加引用*
@@ -158,6 +158,23 @@ public class DemoController {
 }
 
 ```
+
+## 配置管理
+
+### 不自动注册EventHandler
+
+当开发调试时，我们不需要自动注册所有的EventHandler，可以使用配置参数`nest.events.auto=false`来关闭自动注册。
+
+### 配置事件与通道的关系
+
+`nest.events.事件代号=通道代号`
+
+### 配置缓存组信息
+
+`nest.caches.缓存组代号.provider=缓存提供者代号`
+`nest.caches.缓存组代号.idleSeconds=过期时间`
+`nest.caches.缓存组代号.name=名称`
+
 ## 使用原则
 
 ### 异常处理

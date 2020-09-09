@@ -5,8 +5,11 @@ import com.zhaofujun.nest.cache.CacheConfiguration;
 import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.spring.configuration.MessageProperties;
 import com.zhaofujun.nest.spring.configuration.NestProperties;
+import com.zhaofujun.nest.standard.EventBus;
+import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.utils.StringUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
@@ -14,9 +17,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class NestApplicationContextAware implements ApplicationContextAware {
 
+    @Value("${nest.events.auto:true}")
+    private boolean autoRegister;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -53,7 +60,13 @@ public class NestApplicationContextAware implements ApplicationContextAware {
 
 
         nestApplication.setContainerProvider(new SpringBeanContainerProvider(applicationContext));
+        EventBus eventBus = applicationContext.getBean(EventBus.class);
 
+
+        if (autoRegister) {
+            Map<String, EventHandler> beansOfType = applicationContext.getBeansOfType(EventHandler.class);
+            beansOfType.forEach((p, q) -> eventBus.registerHandler(q));
+        }
         ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;
         configurableApplicationContext.addApplicationListener(new ApplicationListener<ContextClosedEvent>() {
             @Override

@@ -33,7 +33,6 @@ public class RedisCacheProvider implements CacheProvider {
 
     @Override
     public <T> T get(String groupName, String key, Type type) {
-
         String redisKey = getRedisKey(groupName, key);
         String json = redisTemplate.opsForValue().get(redisKey);
         if (StringUtils.isEmpty(json)) return null;

@@ -2,6 +2,7 @@ package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.context.appservice.ApplicationServiceIntercept;
 import com.zhaofujun.nest.context.appservice.MethodInvoker;
+import com.zhaofujun.nest.context.appservice.TransactionManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Component;
 public class NestAspect {
 
     @Autowired
-    private SpringUnitOfWorkCommitor commitor;
+    private TransactionManager transactionManager;
 
     @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.standard.AppService)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
-        ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, commitor);
+        ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, transactionManager);
         return intercept.doInvoke();
     }
 

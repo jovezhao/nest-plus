@@ -1,4 +1,4 @@
-dependencies {
+d                                   ependencies {
 //    implementation 'org.jetbrains:annotations:19.0.0'
     compile project(":nest-plus-spring-boot-starter")
     compile project(":nest-plus-spring-automapper")

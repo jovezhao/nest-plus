@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.redis;
+package com.zhaofujun.nest.redis.provider;
 
 import com.zhaofujun.nest.cache.CacheProvider;
 import com.zhaofujun.nest.json.JsonCreator;

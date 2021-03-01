@@ -35,18 +35,9 @@ public class DefaultMessageListenerContainer extends DirectMessageListenerContai
                 String queue = message.getMessageProperties().getConsumerQueue();
                 EventHandler eventHandler = getEventHandler(queue);
                 String messageText = new String(message.getBody());
-                MessageInfo messageInfo = null;
 
                 try {
-                    messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
-                } catch (Exception ex) {
-                    logger.warn("反序列化失败，消息体：" + messageText, ex);
-                    //消息格式不正确，消息做成功消费处理
-                    channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
-                    return;
-                }
-                try {
-                    receivedMessageHandler.receivedMessage(messageInfo, eventHandler, null);
+                    receivedMessageHandler.receivedMessage(messageText, eventHandler, null);
                     channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
                 } catch (CustomException ex) {
                     //发生业务异常，消息做成功消费处理

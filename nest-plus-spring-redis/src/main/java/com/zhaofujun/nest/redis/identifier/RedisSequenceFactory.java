@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.redis;
+package com.zhaofujun.nest.redis.identifier;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;

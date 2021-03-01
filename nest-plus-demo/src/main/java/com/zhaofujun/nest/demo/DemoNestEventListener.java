@@ -1,17 +1,25 @@
 package com.zhaofujun.nest.demo;
 
+import com.zhaofujun.nest.demo.application.UserAppService;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
 import com.zhaofujun.nest.event.ServiceEvent;
+import com.zhaofujun.nest.utils.LockUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class DemoNestEventListener implements ApplicationListener, ServiceContextListener {
+
+    @Autowired
+    private UserAppService appService;
+
     @Override
     public void applicationStarted(ApplicationEvent applicationEvent) {
         System.out.println("applicationStarted");
+        appService.publish();
     }
 
     @Override
@@ -51,5 +59,22 @@ public class DemoNestEventListener implements ApplicationListener, ServiceContex
     public void serviceEnd(ServiceEvent serviceEvent) {
         System.out.println("serviceEnd");
 
+    }
+}
+
+class RunClass implements Runnable {
+    @Override
+    public void run() {
+        for (int j = 0; j < 100; j++) {
+            LockUtils.runByLock("aaaa", () -> {
+                DemoApplication.i[0]++;
+                System.out.println(Thread.currentThread().getName() + ": " + DemoApplication.i[0]);
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }

@@ -51,7 +51,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer implement
     }
 
     @Override
-    public void receivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
-        onReceivedMessage(messageInfo, eventHandler, context);
+    public void receivedMessage(String messageText, EventHandler eventHandler, Object context) {
+        onReceivedMessage(messageText, eventHandler, context);
     }
 }

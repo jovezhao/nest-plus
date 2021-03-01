@@ -9,6 +9,7 @@ public class MessageProperties {
     private String store;
     private String converter;
     private String resendStore;
+    private String delayStore;
 
     public String getStore() {
         return store;
@@ -32,5 +33,13 @@ public class MessageProperties {
 
     public void setResendStore(String resendStore) {
         this.resendStore = resendStore;
+    }
+
+    public String getDelayStore() {
+        return delayStore;
+    }
+
+    public void setDelayStore(String delayStore) {
+        this.delayStore = delayStore;
     }
 }

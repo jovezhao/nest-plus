@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.demo.domain;
 
 import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.BaseValueObject;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 
 public abstract class User extends BaseEntity<LongIdentifier> {

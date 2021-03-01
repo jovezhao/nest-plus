@@ -22,13 +22,13 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
     }
 
     @Override
-    public void commit(String messageGroup, MessageInfo messageInfo) {
+    public void commit(String messageGroup, String messageText) {
         Topic topic = new ActiveMQTopic("VirtualTopic." + messageGroup);
-        String json = getMessageConverter().messageToString(messageInfo);
+
         jmsTemplate.send(topic, new MessageCreator() {
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage(json);
+                return session.createTextMessage(messageText);
             }
         });
 

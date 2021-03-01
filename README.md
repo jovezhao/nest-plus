@@ -252,7 +252,7 @@ Nest支持用户自定义集成第三方缓存系统，只需要实现`com.zhaof
 
 如果您的项目没有使用过`spring-boot-starter-data-redis`，请参考[官方配置参数](https://spring.io/projects/spring-data-redis#overview)完成redis相关配置
 
-对应的缓存提供者代号为`com.zhaofujun.nest.redis.RedisCacheProvider.CODE`。
+对应的缓存提供者代号为`com.zhaofujun.nest.redis.provider.RedisCacheProvider.CODE`。
 
 **演示一：将领域实体使用redis来缓存**
 ```java

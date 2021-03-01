@@ -2,7 +2,9 @@ package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.CacheConfiguration;
+import com.zhaofujun.nest.configuration.LockConfiguration;
 import com.zhaofujun.nest.context.event.EventConfiguration;
+import com.zhaofujun.nest.spring.configuration.LockProperties;
 import com.zhaofujun.nest.spring.configuration.MessageProperties;
 import com.zhaofujun.nest.spring.configuration.NestProperties;
 import com.zhaofujun.nest.standard.EventBus;
@@ -37,6 +39,19 @@ public class NestApplicationContextAware implements ApplicationContextAware {
                 nestApplication.getMessageConfiguration().setResendStore(messageProperties.getResendStore());
             if (!StringUtils.isEmpty(messageProperties.getStore()))
                 nestApplication.getMessageConfiguration().setStore(messageProperties.getStore());
+            if(!StringUtils.isEmpty(messageProperties.getDelayStore()))
+                nestApplication.getMessageConfiguration().setDelayStore(messageProperties.getDelayStore());
+        }
+        LockProperties lockProperties = applicationContext.getBean(LockProperties.class);
+        if (lockProperties != null) {
+
+            LockConfiguration lockConfiguration = nestApplication.getLockConfiguration();
+            if (!StringUtils.isEmpty(lockProperties.getProvider()))
+                lockConfiguration.setProvider(lockProperties.getProvider());
+            if (lockProperties.getRetry() > 0)
+                lockConfiguration.setRetry(lockProperties.getRetry());
+            if (lockProperties.getTimeout() > 0)
+                lockConfiguration.setTimeout(lockProperties.getTimeout());
         }
         NestProperties nestProperties = applicationContext.getBean(NestProperties.class);
         if (nestApplication != null) {

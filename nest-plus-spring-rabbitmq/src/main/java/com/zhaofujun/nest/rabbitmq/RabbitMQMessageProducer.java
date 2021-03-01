@@ -23,11 +23,10 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
     }
 
     @Override
-    public void commit(String messageGroup, MessageInfo messageInfo) {
+    public void commit(String messageGroup, String messageText) {
         amqpAdmin.declareExchange(new FanoutExchange(messageGroup));
-        String json = getMessageConverter().messageToString(messageInfo);
 
-        amqpTemplate.convertAndSend(messageGroup, "", json);
+        amqpTemplate.convertAndSend(messageGroup, "", messageText);
 //        try {
 //
 //            channel = connection.createChannel();

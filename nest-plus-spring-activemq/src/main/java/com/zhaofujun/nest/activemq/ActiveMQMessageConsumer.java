@@ -35,7 +35,6 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                     jmsTemplate.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
                     Message message = jmsTemplate.receive(queue);
                     TextMessage textMessage = (TextMessage) message;
-                    MessageInfo messageInfo;
                     String messageText = "";
                     try {
                         messageText = textMessage.getText();
@@ -43,15 +42,10 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
                         logger.warn("接受message失败:" + messageText, ex);
                         break;
                     }
-                    try {
-                        messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
-                    } catch (Exception ex) {
-                        logger.warn("反序列化失败，消息体：" + messageText, ex);
-                        break;
-                    }
+
 
                     try {
-                        onReceivedMessage(messageInfo, eventHandler, null);
+                        onReceivedMessage(messageText, eventHandler, null);
                         try {
                             textMessage.acknowledge();
                         } catch (JMSException e) {

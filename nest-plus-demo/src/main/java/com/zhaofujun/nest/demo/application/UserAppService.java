@@ -11,7 +11,7 @@ import com.zhaofujun.nest.demo.domain.User;
 import com.zhaofujun.nest.standard.AppService;
 import com.zhaofujun.nest.standard.EventBus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 @AppService
 //@Component
@@ -28,6 +28,7 @@ public class UserAppService {
         eventData.setUserName(user.getName());
         eventBus.publish(eventData);
         return autoMapper.map(user, UserDto.class);
+
     }
 
     public UserDto changeTel(String tel) {
@@ -41,5 +42,12 @@ public class UserAppService {
         Address address = new Address("address", new Point(1, 2));
         user.cacheAddress(address);
         return autoMapper.map(user, UserDto.class);
+    }
+
+    public void publish() {
+        UserChangedEventData eventData = new UserChangedEventData();
+        eventData.setUserName("username");
+        System.out.println("发送:"+System.currentTimeMillis());
+        eventBus.publish(eventData, 5);
     }
 }

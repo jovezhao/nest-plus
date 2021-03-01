@@ -52,16 +52,9 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
 
                     for (MessageExt p : msgs) {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
-                        MessageInfo messageInfo;
+
                         try {
-                            messageInfo = getMessageConverter().jsonToMessage(messageText, eventHandler.getEventDataClass());
-                        } catch (Exception ex) {
-                            logger.warn("反序列化失败，消息体：" + messageText, ex);
-                            //消息格式不正确，消息做成功消费处理
-                            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-                        }
-                        try {
-                            onReceivedMessage(messageInfo, eventHandler, null);
+                            onReceivedMessage(messageText, eventHandler, null);
                         } catch (CustomException ex) {
                             //发生业务异常，消息做成功消费处理
                             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

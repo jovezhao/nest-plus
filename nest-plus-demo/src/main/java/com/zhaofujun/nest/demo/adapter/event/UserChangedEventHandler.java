@@ -19,6 +19,7 @@ public class UserChangedEventHandler implements EventHandler<UserChangedEventDat
 
     @Override
     public void handle(UserChangedEventData userChangedEventData, EventArgs eventArgs) {
-        System.out.println("handle:" + userChangedEventData.getUserName());
+        System.out.println("handle:" + userChangedEventData.getUserName()+System.currentTimeMillis());
+
     }
 }

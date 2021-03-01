@@ -54,7 +54,7 @@ public class RocketMQMessageConsumer extends DistributeMessageConsumer {
                         String messageText = new String(p.getBody(), Charset.forName("UTF-8"));
 
                         try {
-                            onReceivedMessage(messageText, eventHandler, null);
+                            onReceivedMessage(messageText, eventHandler, null,null);
                         } catch (CustomException ex) {
                             //发生业务异常，消息做成功消费处理
                             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

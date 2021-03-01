@@ -15,7 +15,7 @@ public class RocketMQMessageProducer extends DistributeMessageProducer {
     }
 
     @Override
-    public void commit(String messageGroup, String messageInfoString) {
+    public void commit(String messageGroup,String messageId, String messageInfoString) {
 
         rocketMQTemplate.convertAndSend(messageGroup, messageInfoString);
     }

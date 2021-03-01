@@ -22,7 +22,7 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
     }
 
     @Override
-    public void commit(String messageGroup, String messageText) {
+    public void commit(String messageGroup,String messageId, String messageText) {
         Topic topic = new ActiveMQTopic("VirtualTopic." + messageGroup);
 
         jmsTemplate.send(topic, new MessageCreator() {

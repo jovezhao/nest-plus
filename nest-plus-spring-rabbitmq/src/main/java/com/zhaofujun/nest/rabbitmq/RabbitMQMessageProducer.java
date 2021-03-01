@@ -23,7 +23,7 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
     }
 
     @Override
-    public void commit(String messageGroup, String messageText) {
+    public void commit(String messageGroup,String messageId, String messageText) {
         amqpAdmin.declareExchange(new FanoutExchange(messageGroup));
 
         amqpTemplate.convertAndSend(messageGroup, "", messageText);

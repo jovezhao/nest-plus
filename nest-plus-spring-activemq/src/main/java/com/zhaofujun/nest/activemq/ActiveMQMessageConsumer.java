@@ -45,7 +45,7 @@ public class ActiveMQMessageConsumer extends DistributeMessageConsumer {
 
 
                     try {
-                        onReceivedMessage(messageText, eventHandler, null);
+                        onReceivedMessage(messageText, eventHandler, null,null);
                         try {
                             textMessage.acknowledge();
                         } catch (JMSException e) {

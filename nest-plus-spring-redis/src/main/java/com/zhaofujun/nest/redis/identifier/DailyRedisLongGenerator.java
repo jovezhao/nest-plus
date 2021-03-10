@@ -1,27 +1,25 @@
 package com.zhaofujun.nest.redis.identifier;
 
-import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
+import com.zhaofujun.nest.utils.identifier.LongGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
 
-@Component(DailyRedisLongIdentifierGenerator.CODE)
-public class DailyRedisLongIdentifierGenerator implements LongIdentifierGenerator {
+public class DailyRedisLongGenerator implements LongGenerator {
 
-    public final static String CODE = "DailyRedisLongIdentifierGenerator";
+    public final static String CODE = "DailyRedisLongGenerator";
 
     private RedisTemplate redisTemplate;
     private String prefix="nest_redis_id_daily_";
 
-    public DailyRedisLongIdentifierGenerator(RedisTemplate redisTemplate) {
+    public DailyRedisLongGenerator(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return CODE;
     }
 

@@ -41,7 +41,8 @@ public class RedisRelayMessageStoreProvider implements DelayMessageStore {
         LockUtils.runByLock(storeKey, () -> {
             Set<String> messageJsonSet = redisTemplate.opsForZSet().rangeByScore(storeKey, 0, System.currentTimeMillis());
 
-            redisTemplate.opsForZSet().remove(storeKey, messageJsonSet.toArray(new String[messageJsonSet.size()]));
+            Object[] values = messageJsonSet.toArray(new String[messageJsonSet.size()]);
+            redisTemplate.opsForZSet().remove(storeKey, values);
             messageBacklogs.addAll(messageJsonSet.stream().map(p -> jsonCreator.toObj(p, MessageBacklog.class)).collect(Collectors.toList()));
         });
         return messageBacklogs;

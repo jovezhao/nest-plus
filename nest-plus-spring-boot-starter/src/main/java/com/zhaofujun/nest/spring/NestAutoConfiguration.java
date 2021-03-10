@@ -2,6 +2,8 @@ package com.zhaofujun.nest.spring;
 
 import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.standard.EventBus;
+import com.zhaofujun.nest.utils.identifier.impl.LocalLongGenerator;
+import com.zhaofujun.nest.utils.identifier.impl.SnowflakeLongGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,5 +24,13 @@ public class NestAutoConfiguration {
         return new DefaultEventBus();
     }
 
+    @Bean("snowflakeLongGenerator")
+    public SnowflakeLongGenerator snowflakeLongIdentifierGenerator(){
+        return new SnowflakeLongGenerator();
+    }
+    @Bean("localLongGenerator")
+    public LocalLongGenerator localLongIdentifierGenerator(){
+        return new LocalLongGenerator();
+    }
 }
 

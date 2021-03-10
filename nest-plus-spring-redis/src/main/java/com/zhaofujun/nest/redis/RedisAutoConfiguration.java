@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.redis;
 
-import com.zhaofujun.nest.redis.identifier.DailyRedisLongIdentifierGenerator;
-import com.zhaofujun.nest.redis.identifier.RedisLongIdentifierGenerator;
+import com.zhaofujun.nest.redis.identifier.DailyRedisLongGenerator;
+import com.zhaofujun.nest.redis.identifier.RedisLongGenerator;
 import com.zhaofujun.nest.redis.identifier.RedisSequenceFactory;
 import com.zhaofujun.nest.redis.provider.RedisCacheProvider;
 import com.zhaofujun.nest.redis.provider.RedisLockProvider;
@@ -33,13 +33,13 @@ public class RedisAutoConfiguration {
     public RedisLockProvider lockProvider(RedisTemplate stringRedisTemplate) {
         return new RedisLockProvider(stringRedisTemplate);
     }
-    @Bean(RedisLongIdentifierGenerator.CODE)
-    public RedisLongIdentifierGenerator redisLongIdentifierGenerator(RedisTemplate redisTemplate){
-        return new RedisLongIdentifierGenerator(redisTemplate);
+    @Bean(RedisLongGenerator.CODE)
+    public RedisLongGenerator redisLongIdentifierGenerator(RedisTemplate redisTemplate){
+        return new RedisLongGenerator(redisTemplate);
     }
 
-    @Bean(DailyRedisLongIdentifierGenerator.CODE)
-    public DailyRedisLongIdentifierGenerator dailyRedisLongIdentifierGenerator(RedisTemplate redisTemplate){
-        return new DailyRedisLongIdentifierGenerator(redisTemplate);
+    @Bean(DailyRedisLongGenerator.CODE)
+    public DailyRedisLongGenerator dailyRedisLongIdentifierGenerator(RedisTemplate redisTemplate){
+        return new DailyRedisLongGenerator(redisTemplate);
     }
 }

@@ -36,7 +36,7 @@ public class LongFactoryImpl implements LongFactory {
                 .findFirst()
                 .get();
         if (identifierGenerator == null) {
-            return getLongGenerator("snowflakeLongIdentifierGenerator");
+            return getLongGenerator(LongFactory.snowflakeCode);
         }
         return identifierGenerator;
     }

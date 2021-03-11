@@ -16,16 +16,16 @@ public class LongFactoryImpl implements LongFactory {
 
 
     @Override
-    public Long createLong(String generatorCode,String type) {
+    public Long createLong(String generatorCode, String type) {
         LongGenerator longGenerator = getLongGenerator(generatorCode);
         Long value = longGenerator.nextValue(type);
         return value;
     }
 
 
-    public LongIdentifier create(String generatorCode,String type) {
+    public LongIdentifier create(String generatorCode, String type) {
 
-        return LongIdentifier.valueOf(createLong(type, generatorCode));
+        return LongIdentifier.valueOf(createLong(generatorCode, type));
     }
 
     private LongGenerator getLongGenerator(String generatorCode) {

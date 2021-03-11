@@ -29,7 +29,7 @@ public class NestAutoConfiguration {
         return new SnowflakeLongGenerator();
     }
     @Bean("localLongGenerator")
-    public LocalLongGenerator localLongIdentifierGenerator(){
+public LocalLongGenerator localLongIdentifierGenerator(){
         return new LocalLongGenerator();
     }
 }

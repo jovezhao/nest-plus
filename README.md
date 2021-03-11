@@ -17,13 +17,13 @@ nest-plus不仅仅集成了spring，还集成了activemq、rocketmq、rabbitmq�
 <dependency>
   <groupId>com.zhaofujun.nest</groupId>
   <artifactId>nest-plus-spring-boot-starter</artifactId>
-  <version>2.1.11</version>
+  <version>2.2.4</version>
 </dependency>
 ```
 *使用Gradle方式添加引用*
 
 ```groovy
-implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.0.8'
+implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.2.4'
 ```
 
 在`nest-plus-spring-boot-starter`模块使用`SpringBeanContainerProvider`集成了Spring的IOC来完成Bean容器的支持
@@ -174,7 +174,15 @@ public class DemoController {
 `nest.caches.缓存组代号.provider=缓存提供者代号`
 `nest.caches.缓存组代号.idleSeconds=过期时间`
 `nest.caches.缓存组代号.name=名称`
-
+### 配置消息
+`nest.message.store=消息存储器代号`
+`nest.message.converter=消息转换器代号`
+`nest.message.resendStore=异常消息暂存器代号`
+`nest.message.delayStore=延迟消息暂存器代号`
+### 配置锁提供者
+`nest.lock.provider=锁提供者代号`
+`nest.lock.retry=重试获取锁的次数`
+`nest.lock.timeout=锁超时时间`
 ## 使用原则
 
 ### 异常处理

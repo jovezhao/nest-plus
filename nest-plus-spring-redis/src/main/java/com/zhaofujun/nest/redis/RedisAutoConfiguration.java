@@ -30,7 +30,7 @@ public class RedisAutoConfiguration {
         return new RedisSequenceFactory(stringRedisTemplate);
     }
     @Bean
-    public RedisLockProvider lockProvider(RedisTemplate stringRedisTemplate) {
+    public RedisLockProvider lockProvider(StringRedisTemplate stringRedisTemplate) {
         return new RedisLockProvider(stringRedisTemplate);
     }
     @Bean(RedisLongGenerator.CODE)

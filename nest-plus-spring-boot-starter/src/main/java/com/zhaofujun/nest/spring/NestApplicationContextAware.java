@@ -52,6 +52,8 @@ public class NestApplicationContextAware implements ApplicationContextAware {
                 lockConfiguration.setRetry(lockProperties.getRetry());
             if (lockProperties.getTimeout() > 0)
                 lockConfiguration.setTimeout(lockProperties.getTimeout());
+            if(lockProperties.getWaitTime()>0)
+                lockConfiguration.setWaitTime(lockProperties.getWaitTime());
         }
         NestProperties nestProperties = applicationContext.getBean(NestProperties.class);
         if (nestApplication != null) {

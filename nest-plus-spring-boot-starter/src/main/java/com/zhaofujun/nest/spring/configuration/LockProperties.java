@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 public class LockProperties {
     private String provider;
     private int retry=3;
-    private int timeout=1000;
+    private int timeout=5000;
+    private int waitTime=1000;
 
     public String getProvider() {
         return provider;
@@ -33,5 +34,13 @@ public class LockProperties {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public int getWaitTime() {
+        return waitTime;
+    }
+
+    public void setWaitTime(int waitTime) {
+        this.waitTime = waitTime;
     }
 }

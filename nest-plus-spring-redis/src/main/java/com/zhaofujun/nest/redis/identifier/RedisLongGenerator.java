@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.redis.identifier;
 
-import com.zhaofujun.nest.utils.identifier.LongGenerator;
+import com.zhaofujun.nest.provider.LongGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
 
 public class RedisLongGenerator implements LongGenerator {

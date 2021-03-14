@@ -21,6 +21,7 @@ public class UserAppService {
     @Autowired
     private EventBus eventBus;
 
+
     public UserDto create(String name, String tel) {
         User user = EntityFactory.create(User.class, LongIdentifier.valueOf(100L));
         user.init(name, tel);

@@ -1,5 +1,9 @@
 package com.zhaofujun.nest.demo;
 
+import com.zhaofujun.automapper.mapping.ClassMapping;
+import com.zhaofujun.nest.demo.domain.Teacher;
+import com.zhaofujun.nest.demo.domain.User;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -32,14 +36,13 @@ public class DemoConfiguration {
 //        return cacheConfiguration;
 //    }
 
-//    @Bean
-//    public ClassMapping UserDmo2Do() {
-//        return new ClassMappingBuilder(UserDmo.class, User.class, true)
-//                .field("id", "id")
-//                .builder();
-//    }
-//
-//
+    @Bean
+    public ClassMapping UserDmo2Do() {
+        return new ClassMapping(Teacher.class, User.class)
+                .field("id", "id");
+    }
+
+
 
 }
 

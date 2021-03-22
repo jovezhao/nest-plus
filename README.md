@@ -676,9 +676,8 @@ public class DemoConfiguration   {
 
     @Bean
     public ClassMapping UserDmo2Do() {
-        return new ClassMappingBuilder(UserDmo.class, User.class, true)
-                .field("id", "id")
-                .builder();
+        return new ClassMapping(UserDmo.class, User.class)
+                .field("id", "id");
     }
     
 }

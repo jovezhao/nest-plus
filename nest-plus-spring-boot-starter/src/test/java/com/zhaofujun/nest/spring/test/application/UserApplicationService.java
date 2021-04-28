@@ -6,11 +6,13 @@ import com.zhaofujun.nest.spring.test.domain.HomeAddress;
 import com.zhaofujun.nest.spring.test.domain.Teacher;
 import com.zhaofujun.nest.spring.test.domain.User;
 import com.zhaofujun.nest.standard.AppService;
+import com.zhaofujun.nest.standard.AppServiceIgnore;
 import org.springframework.stereotype.Component;
 
 @AppService
 @Component
 public class UserApplicationService {
+
     public void create() {
         User user = EntityFactory.create(User.class, LongIdentifier.valueOf(10L));
         user.init("name1", 11, new HomeAddress(1, 2, "address1"));

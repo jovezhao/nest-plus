@@ -17,13 +17,13 @@ nest-plus不仅仅集成了spring，还集成了activemq、rocketmq、rabbitmq�
 <dependency>
   <groupId>com.zhaofujun.nest</groupId>
   <artifactId>nest-plus-spring-boot-starter</artifactId>
-  <version>2.2.4</version>
+  <version>2.2.10</version>
 </dependency>
 ```
 *使用Gradle方式添加引用*
 
 ```groovy
-implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.2.4'
+implementation 'com.zhaofujun.nest:nest-plus-spring-boot-starter:2.2.10'
 ```
 
 在`nest-plus-spring-boot-starter`模块使用`SpringBeanContainerProvider`集成了Spring的IOC来完成Bean容器的支持

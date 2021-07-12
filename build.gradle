@@ -11,13 +11,13 @@ buildscript {
 }
 
 ext{
-    nestVersion="2.2.10"
+    nestVersion="2.2.12"
 }
 
 allprojects {
     group 'com.zhaofujun.nest'
 //    version '1.0-SNAPSHOT'
-    version "2.2.10"
+    version "2.2.12"
 }
 
 subprojects {
